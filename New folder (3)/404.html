@@ -1,0 +1,2696 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn tập Lý Sinh Y Học</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .quiz-card {
+            transition: all 0.3s ease;
+        }
+        .option-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        .animate-slide-in {
+            animation: slideInRight 0.3s ease-out forwards;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Dữ liệu câu hỏi
+        const QUESTION_DATA = {
+            "Đề 1": [
+                {
+                    id: 1,
+                    question: "Điện tâm đồ của người này so với người khác:",
+                    options: [
+                        "Đồng nhất về hình dạng của cùng một đơn sóng bất kì.",
+                        "Luôn giống nhau về thành phần các đơn sóng trong một chu kì điện tim.",
+                        "Khác nhau về biên độ của cùng một đơn sóng nào đó.",
+                        "Đồng nhất về thời khoảng của cùng một đơn sóng bất kì."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 2,
+                    question: "Tác dụng quang động lực là sự tổn thương….. (I)… một số chức năng sinh lý và cấu trúc dưới tác dụng của ….. (II)….… với sự có mặt của ….(III)..…",
+                    options: [
+                        "I: không phục hồi, II: ánh sáng, III: ôxi + chất màu.",
+                        "I: có thể phục hồi, II: bức xạ ion hóa, III: ôxi + chất màu.",
+                        "I: có thể phục hồi, II: ánh sáng, III: ôxi + chất màu.",
+                        "I: không phục hồi, II: bức xạ ion hoá, III: ôxi + chất màu."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 3,
+                    question: "Kích thích càng mạnh thì:",
+                    options: [
+                        "Xung điện động kéo dài càng lâu.",
+                        "Biên độ xung điện thế hoạt động càng lớn",
+                        "Vùng bị kích hoạt trên màng tế bào càng rộng",
+                        "Thời gian kéo dài và biên độ xung điện động vẫn không thay đổi"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 4,
+                    question: "Mắt cận thị là mắt:",
+                    options: [
+                        "Chỉ có khả năng nhìn gần;",
+                        "có điểm cực viễn ở cách mắt một khoảng hữu hạn;",
+                        "Ở trạng thái thư giãn, có tiêu điểm ở trước võng mạc;",
+                        "Cả A, B, C đều đúng."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 5,
+                    question: "Về nguyên nhân tồn tại tính phóng xạ của các hạt nhân trong tự nhiên:",
+                    options: [
+                        "Các proton mang điện tích cùng dấu đẩy nhau nên hạt nhân không bền vững",
+                        "Lực liên kết giữa các nucleon không đủ mạnh để giữ hạt nhân bền vững",
+                        "Xu hướng hạt nhân nặng giải phóng dự trữ năng lượng lớn của nó",
+                        "Cả A, B, C đều đúng."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 6,
+                    question: "Điểm cực viễn của mắt không có tật là:",
+                    options: [
+                        "Điểm mà nhìn vào đó mắt phải điều tiết tối đa .",
+                        "Điểm xa nhất trên trục nhìn mà đặt vật ở đó, mắt còn nhìn thấy rõ, không cần điều tiết",
+                        "Điểm ở xa vô cùng trên trục nhìn ;",
+                        "Điểm xa nhất mà mắt còn nhìn rõ;"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 7,
+                    question: "Phương trình cân bằng vận chuyển điện tích qua màng tế bào được xây dựng trong điều kiện:",
+                    options: [
+                        "Có tính đến sự tham gia của các iôn hoá trị 2 như Ca++, Mg++….",
+                        "Không tính đến sự vận chuyển thụ động.",
+                        "Tổng điện tích được vận chuyển qua màng trong một đơn vị thời gian theo 2 hướng ngược nhau là bằng nhau.",
+                        "Chỉ tính đến sự vận chuyển hai loại ion K+, Cl- qua màng mà không tính đến sự vận chuyển của ion Na+."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 8,
+                    question: "Quá trình nhìn có thể biểu diễn thông qua sơ đồ tổng hợp và phân hủy sắc tố thị giác : Rodopxin <-> opxin + Retinal. Khi độ rọi sáng tăng:",
+                    options: [
+                        "hàm lượng Rodopxin được điều chỉnh thông qua phản ứng hóa sinh trung gian.",
+                        "cân bằng sẽ dịch chuyển sang phải",
+                        "cân bằng sẽ dịch chuyển sang trái.",
+                        "hàm lượng Rodopxin được điều chỉnh bằng cách bổ xung Retinal lấy từ vitamin A dự trữ."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 9,
+                    question: "Chọn nhận xét đúng về thị giác Scoto:",
+                    options: [
+                        "Các tế bào que và tế bào nón cùng tham gia vào quá trình này",
+                        "Trong quá trình nhìn này Rodopxin phân hủy thành Opxin và Retinal",
+                        "Chỉ có các tế bào nón tham gia vào quá trình này",
+                        "Ánh sáng tác dụng lên mắt trong thị giác Scoto có độ rọi lớn."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 10,
+                    question: "Đặc điểm khác nhau giữa điện thế nghỉ và điện thế hoạt động: I. Tính định xứ; II. Thời gian tồn tại; III. Dấu của điện thế. Ta chọn:",
+                    options: [
+                        "I và III",
+                        "II và III",
+                        "I, II và III",
+                        "I và II"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 11,
+                    question: "Tác dụng của dòng điện lên cơ thể:",
+                    options: [
+                        "Dòng một chiều làm thay đổi tính thấm  màng tế bào do đó có thể làm tăng trao đổi chất.",
+                        "Gây tử vong chủ yếu do toả nhiệt.",
+                        "Dòng một chiều gây kích thích cơ và thần kinh là chủ yếu.",
+                        "Xung điện gây các phản ứng hoá học trong cơ thể và dưới các điện cực."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 12,
+                    question: "Về kính sửa tật cân thị:",
+                    options: [
+                        "Mắt cận thị đeo kính phân kỳ để nhìn rõ vật ở gần như mắt không tật.",
+                        "Mắt cận thị đeo kính hội tụ để nhìn rõ vật ở xa vô cực như mắt không tật.",
+                        "Mắt cận thị đeo kính hội tụ để nhìn rõ vật ở gần như mắt không tật.",
+                        "Mắt cận thị đeo kính phân kỳ để nhìn rõ vật ở xa vô cực như mắt không tật."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 13,
+                    question: "Đặc điểm của phương pháp đánh dấu phóng xạ:",
+                    options: [
+                        "Khối lượng chất đánh dấu phóng xạ thường rất nhỏ.",
+                        "Chỉ có thể đưa chất phóng xạ vào cơ thể bằng hình thức tiêm hoặc uống.",
+                        "Có thể dùng chất phóng xạ có sẵn trong cơ thể.",
+                        "Chỉ đánh dấu PX được các chất vô cơ mà không đánh dấu với các chất hữu cơ vì khối lượng của chúng quá lớn."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 14,
+                    question: "Xác định phát biểu sai về cơ sở phân tử của sự thụ cảm ánh sáng:",
+                    options: [
+                        "Ở tế bào que có Iodopxin, ở tế bào nón có Rodopxin là các sắc tố thụ cảm ánh sáng.",
+                        "Ở võng mạc người ta thấy có các tế bào thụ cảm ánh sáng là tế bào nón và tế bào que.",
+                        "Sự tái tạo Rodopxin (hoặc Iodopxin) trong bóng tối được thực hiện dưới tác dụng của năng lượng hoá sinh.",
+                        "Phản ứng quang hoá phân huỷ Iodop xin (hoặc Rodopxin) làm phát sinh các xung động thần kinh truyền vào dây thần kinh thị giác."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 15,
+                    question: "Trong hiệu ứng quang động lực, tác dụng của ánh sáng lên cơ thể sống là:",
+                    options: [
+                        "Tác dụng trực tiếp",
+                        "Tác dụng tổng hợp",
+                        "Tác dụng gián tiếp",
+                        "Tác dụng phân tích"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 16,
+                    question: "Khả năng hội tụ chùm tia laser vào một điểm rất nhỏ đạt được là nhờ:",
+                    options: [
+                        "Tính đơn sắc của chùm tia laser.",
+                        "Tính kết hợp của chùm tia laser.",
+                        "Tia laser có thể tồn tại ở dạng xung.",
+                        "Tia laser có cường độ lớn."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 17,
+                    question: "Khả năng phân ly của kính hiển vi bị giới hạn bởi hiện tượng:",
+                    options: [
+                        "Giao thoa ánh sáng.",
+                        "Nhiễu xạ ánh sáng.",
+                        "Hấp thụ ánh sáng.",
+                        "Phản xạ ánh sáng."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 18,
+                    question: "Mức độ gây nguy hiểm của dòng điện khi đi qua cơ thể chủ yếu được quyết định bởi:",
+                    options: [
+                        "Đường dẫn truyền qua cơ thể",
+                        "Tần số của dòng điện",
+                        "Hiệu điện thế đặt vào cơ thể",
+                        "Cường độ dòng điện đi qua cơ thể"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 19,
+                    question: "Chọn cụm từ thích hợp: Từ các cơ chế của tác dụng quang động lực người ta thấy chất màu đóng vai trò xúc tác quang hoá ở trạng thái .............(I)................ và nó ...............(II)............. ở cuối phản ứng.",
+                    options: [
+                        "I : triplet ; II : bị phân huỷ",
+                        "I : singlet ; II : được tái tạo",
+                        "I : singlet ; II : bị phân huỷ",
+                        "I : triplet ;  II : được tái tạo"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 20,
+                    question: "Cận thị là tật của mắt mà khi mắt không điều tiết thì:",
+                    options: [
+                        "Không nhìn rõ những vật ở gần.",
+                        "Tiêu điểm của mắt nằm trước võng mạc.",
+                        "Tiêu điểm của mắt nằm sau võng mạc.",
+                        "Ảnh của các vật ở vô cùng hiện lên ở điểm cực viễn của mắt."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 21,
+                    question: "Có 4 chùm hạt  α, β+, β-, γ cùng mật độ (thí dụ 10 hạt / cm2.s) cùng xuyên vào tấm chì dày 5 cm, sau tấm chì ta thấy còn có các loại hạt:",
+                    options: [
+                        "Tia γ",
+                        "β+, β-  và tia γ",
+                        "Không có hạt nào",
+                        "α và β-"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 22,
+                    question: "Ảnh cắt lớp sử dụng tín hiệu là ….(I)……..cho chúng ta thông tin về cấu trúc của phần tử thể tích, tức là …. (II) ….",
+                    options: [
+                        "(I) : thời gian hồi phục T1, T2, (II) : chứa nhiều loại chất gì : máu , chất dịch, não hay tuỷ….",
+                        "(I) : tín hiệu cảm ứng suy giảm tự do FID, (II) : chứa nhiều loại chất gì : chất dịch, não hay tuỷ….",
+                        "(I) : tín hiệu cảm ứng suy giảm tự do FID, (II) : chứa nước, mỡ hay máu…",
+                        "(I) : thời gian hồi phục T1, T2, (II) : chứa nhiều hay ít proton (mật độ proton)"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 23,
+                    question: "Xác định phát biểu sai về hiệu ứng sinh học của tia phóng xạ đối với cơ thể sống:",
+                    options: [
+                        "Tế bào có thể mất khả năng phân chia.",
+                        "Nhân tế bào bị tổn thương ít hơn so với màng.",
+                        "Các phân tử protein bị đứt gãy làm giảm khả năng hoạt động chức năng một số mô.",
+                        "Cấu trúc của ADN có thể bị thay đổi tạo ADN dị thường."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 24,
+                    question: "Vật kính và thị kính trong kính hiển vi có vai trò:",
+                    options: [
+                        "Vật kính tạo ra ảnh ảo rất lớn của vật cần quan sát và thị kính dùng như một kính lúp để quan sát ảnh ảo nói trên;",
+                        "Thị kính tạo ra ảnh thật rất lớn của vật cần quan sát, vật kính dùng như một kính lúp để quan sát ảnh nói trên;",
+                        "Thị kính tạo ra ảnh ảo rất lớn của vật cần quan sát, vật kính dùng như một kính lúp để quan sát ảnh nói trên;",
+                        "Vật kính tạo ra một ảnh thật rất lớn của vật cần quan sát và thị kính dùng như một kính lúp để quan sát ảnh nói trên."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 25,
+                    question: "Cơ sở của phương pháp phân tích cấu trúc vĩ mô bằng tia X (phương pháp chẩn đoán bằng hình ảnh do tia X tạo ra):",
+                    options: [
+                        "Tia X là sóng điện từ có bước sóng nhỏ hơn 10^-2  m.",
+                        "Tia X mang năng lượng    ε = hf",
+                        "Tia X phản xạ, khúc xạ giống như ánh sáng.",
+                        "Định luật hấp thụ tia X: I = I0. e^-µx"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 26,
+                    question: "Cơ sở của cơ chế tác dụng trực tiếp của các bức xạ iôn hoá lên cơ thể sống:",
+                    options: [
+                        "ảnh hưởng của hàm lượng nước và nhiệt độ đối với các hiệu ứng sinh học do chiếu xạ",
+                        "ảnh hưởng của nồng độ oxy đối đối với các hiệu ứng sinh học do chiếu xạ",
+                        "Bức xạ ion hóa có khả năng kích thích hoặc ion hóa mọi loại phân tử, bao gồm  cả các đại phân tử hữu cơ",
+                        "Sự xuất hiện của các gốc tự do và phân tử H2O2 trong đối tượng bị chiếu xạ"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 27,
+                    question: "Khả năng đâm xuyên của các bức xạ hãm trong chùm tia X phụ thuộc vào:",
+                    options: [
+                        "Bản chất kim loại làm anốt.",
+                        "Cường độ dòng đốt nóng katốt.",
+                        "Hiệu điện thế anốt-katốt.",
+                        "Bản chất kim loại làm katốt."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 28,
+                    question: "Lân quang là sự bức xạ lượng tử ánh sáng do các phân tử, nguyên tử phát ra khi chúng:",
+                    options: [
+                        "Chuyển từ trạng thái kích thích singlet về trạng thái cơ bản.",
+                        "Chuyển từ trạng thái kích thích triplet về trạng thái cơ bản.",
+                        "Chuyển từ trạng thái kích thích mạnh về trạng thái kích thích yếu hơn.",
+                        "Chuyển từ trạng thái kích thích triplet này sang trạng thái kích thích triplet khác."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 29,
+                    question: "Ánh sáng bị tán sắc bởi lăng kính thuỷ tinh vì:",
+                    options: [
+                        "Mỗi màu có bước sóng riêng",
+                        "Lăng kính trong suốt",
+                        "Ánh sáng trắng có bảy màu",
+                        "Chiết suất thuỷ tinh đối với ánh sáng đơn sắc có λ khác nhau thì khác nhau."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 30,
+                    question: "Nhận xét về quĩ đạo của các hạt vi mô tích điện khi xuyên vào vật chất:",
+                    options: [
+                        "Quĩ đạo hạt proton là đường ngoằn ngoèo, gấp khúc",
+                        "Quĩ đạo hạt β- là đường thẳng",
+                        "Quĩ đạo hạt β- là đường ngoằn nghoèo, gấp khúc",
+                        "Quĩ đạo hạt α là đường ngoằn nghèo, gấp khúc"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 31,
+                    question: "Dùng ............ để rút lại lượng nước thừa từ buồng trước của mắt để chống lại sự tăng nhãn áp.",
+                    options: [
+                        "dung dịch đẳng trương",
+                        "dung dịch ưu trương",
+                        "dung dịch nhược trương",
+                        "dung dịch muối"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 32,
+                    question: "Các cơ chế vận chuyển vật chất qua màng tế bào:",
+                    options: [
+                        "Vận chuyển thụ động với sự giúp đỡ của các protein vận chuyển và năng lượng ATP",
+                        "Vận chuyển tích cực với sự giúp đỡ của các chất mang và năng lượng dự trữ trong các loại gradient ở vùng màng.",
+                        "Khuếch tán đơn giản qua lớp lipid kép đối với các phân tử khí, phân tử thích nước và có kích thước nhỏ",
+                        "Khuếch tán qua các kênh protein và kênh ion dành cho các phân tử thích nước và các ion"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 33,
+                    question: "Áp suất phụ tác dụng lên mặt thoáng cong của chất lỏng:",
+                    options: [
+                        "Có độ lớn tỷ lệ nghịch với khối lượng riêng của chất lỏng và độ cong của mặt thoáng.",
+                        "Có chiều độc lập với sự định hướng của mặt cong.",
+                        "Có độ lớn phụ thuộc vào bản chất của chất lỏng và độ cong của mặt thoáng.",
+                        "Có phương luôn tiếp xúc với mặt thoáng."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 34,
+                    question: "Tại phổi oxi O2 được khuếch tán từ phế nang vào các mao tĩnh mạch, còn khí cacbonic CO2 được khuếch tán từ mao tĩnh mạch vào phế nang là do:",
+                    options: [
+                        "phân áp O2 ở phế nang cao hơn ở tĩnh mạch",
+                        "phân áp O2 ở mao tĩnh mạch cao hơn ở phế nang",
+                        "phân áp CO2 ở phế nang cao hơn ở mao tĩnh mạch",
+                        "phân áp CO2 ở phế nang thấp hơn môi trường"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 35,
+                    question: "Giữa hai đầu một đoạn mạch trong hệ tuần hoàn yếu tố nào sau đây không thay đổi:",
+                    options: [
+                        "Áp suất",
+                        "Vận tốc",
+                        "Năng lượng",
+                        "Lưu lượng"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 36,
+                    question: "Dung dịch:",
+                    options: [
+                        "Dung dịch ưu trương có áp suất thẩm thấu nhỏ hơn áp suất thẩm thấu của dung dịch chuẩn.",
+                        "Dung dịch nhược trương có áp suất thẩm thấu lớn hơn áp suất thẩm thấu của dung dịch chuẩn.",
+                        "Tế bào để trong dung dịch nhược trương sẽ bị mất nước và teo lại.",
+                        "Dung dịch đẳng trương có áp suất thẩm thấu bằng áp suất thẩm thấu của dung dịch chuẩn."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 37,
+                    question: "Khi cơ thể chuyển từ trạng thái nghỉ ngơi sang trạng thái hoạt động tích cực, biện pháp quan trọng và hiệu quả nhất mà hệ tuần hoàn đã thực hiện để cung cấp đủ oxi và các chất dinh dưỡng là:",
+                    options: [
+                        "Giảm bớt hoạt động của một số tổ chức không cần thiết nhằm ổn định lưu lượng máu lưu thông trong hệ mạch",
+                        "Giãn mạch để tăng lưu lượng máu lưu thông theo công thức Poadơ",
+                        "Tăng nhịp đập của tim.",
+                        "Tăng áp suất máu để đẩy được một lượng máu lớn vào hệ mạch theo công thức Poadơ."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 38,
+                    question: "Về siêu âm:",
+                    options: [
+                        "Một thanh sắt từ khi bị từ hóa thì chiều dài của nó tăng lên một chút, đó là hiện tượng từ giảo.",
+                        "Các chất dùng làm nguồn phát và thu siêu âm có khả năng biến dạng lớn dưới tác dụng của ngoại lực và có khả năng đàn hồi lớn.",
+                        "Nguyên tắc thu siêu âm dựa vào hiệu ứng áp điện nghịch.",
+                        "Nguyên tắc phát siêu âm dựa vào hiệu ứng áp điện thuận và hiện tượng từ giảo."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 39,
+                    question: "Nếu con người từ tư thế nằm chuyển sang tư thế đứng:",
+                    options: [
+                        "ở kỳ tâm trương lượng máu từ các tĩnh mạch dưới đổ về tim bị giảm bớt.",
+                        "do tác dụng của trọng lực áp suất máu ở chi dưới thay đổi đáng kể.",
+                        "áp suất máu do tim co bóp tăng lên.",
+                        "khối lượng máu được tim đẩy ra sau một lần co bóp không đổi."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 40,
+                    question: "Tính chất của chùm siêu âm:",
+                    options: [
+                        "Với 2 chùm siêu âm có cường độ như nhau, chùm siêu âm có tần số càng lớn thì khả năng xuyên sâu vào cơ thể càng lớn",
+                        "Trong quá trình lan truyền của sóng siêu âm khi gặp các vật cản có thể xảy ra hiện tượng nhiễu xạ",
+                        "Với kích thước và hình dạng thích hợp của đầu phát có thể thu được chùm siêu âm có độ phân kỳ nhỏ",
+                        "Sóng siêu âm khi lan truyền cũng có các tính chất tương tự như sóng âm"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 41,
+                    question: "Hai âm phức tạp khác nhau mà có cùng tần số, độ to thì khác nhau bởi:",
+                    options: [
+                        "Biên độ áp suất gây ra tại màng nhĩ.",
+                        "Thành phần dao động điều hoà hình sin đã tạo nên mỗi âm.",
+                        "Độ cao của âm",
+                        "Cả A, B, C."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 42,
+                    question: "Sóng âm:",
+                    options: [
+                        "Là sóng ngang lan truyền được trong môi trường đàn hồi, có tần số từ 16Hz đến 20.000Hz.",
+                        "Là sóng dọc lan truyền được trong mọi môi trường.",
+                        "Là sóng dọc lan truyền trong môi trường đàn hồi, có tần số từ 16Hz đến 20.000Hz.",
+                        "Là sóng ngang lan truyền được trong mọi môi trường, kể cả chân không."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 43,
+                    question: "Trong 4 đặc trưng của sóng dưới đây, đặc trưng nào không liên quan đến các đặc trưng còn lại:",
+                    options: [
+                        "Vận tốc truyền sóng.",
+                        "Bước sóng.",
+                        "Biên độ",
+                        "Tần số sóng."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 44,
+                    question: "Sự trao đổi chất xảy ra ở thành mao mạch có động lực là:",
+                    options: [
+                        "gradien áp suất thủy tĩnh, thủy động ở thành mao mạch",
+                        "các loại gradien nồng độ ở thành mao mạch",
+                        "các loại gradien áp suất ở thành mao mạch",
+                        "gradien áp suất thẩm thấu ở thành mao mạch"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 45,
+                    question: "Hiện tượng nào có liên quan đến bệnh màng phổi ở trẻ sơ sinh đẻ non:",
+                    options: [
+                        "Hiện tượng thẩm thấu",
+                        "Hiện tượng tràn khí màng phổi",
+                        "Hiện tượng mao dẫn",
+                        "Hiện tượng căng mặt ngoài"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 46,
+                    question: "Trong hiệu ứng Doppler, f là tần số sóng từ nguồn phát ra, f’ là tần số sóng máy thu sẽ thu được, ta có: I. Nguồn và máy thu đi xa nhau f’ > f; II. Nguồn và máy thu đi lại gần nhau f’ < f. Ta thấy:",
+                    options: [
+                        "I sai II đúng",
+                        "I và II đều sai",
+                        "I và II đều đúng",
+                        "I đúng II sai"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 47,
+                    question: "Áp suất máu giảm dần từ cửa thất trái đến cửa nhĩ phải thì khoảng làm giảm áp suất nhiều nhất là:",
+                    options: [
+                        "Tiểu động mạch và tiểu tĩnh mạch.",
+                        "Tĩnh mạch chủ.",
+                        "Mao động mạch và mao tĩnh mạch.",
+                        "Động mạch chủ."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 48,
+                    question: "Sự hình thành cảm giác âm ở cơ quan thính giác người:",
+                    options: [
+                        "Độ to của âm có được căn cứ vào tốc độ lan truyền của xung kích thích về thần kinh trung ương.",
+                        "Âm có tần số lớn tạo ra chuyển động xoáy kích thích vị trí gần với đỉnh ốc tai của màng đáy.",
+                        "Cảm giác độ cao hình thành phụ thuộc vào vị trí sóng âm kích thích màng đáy ở tai trong",
+                        "Âm sắc hình thành trên cơ sở số lượng xung thần kinh được truyền tới thần kinh trung ương."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 49,
+                    question: "Người ta thấy các đặc trưng của cảm giác âm phụ thuộc vào các đặc trưng vật lý:",
+                    options: [
+                        "Độ to không phụ thuộc vào tần số âm.",
+                        "Âm sắc phụ thuộc vào tần số âm.",
+                        "Độ to của âm phụ thuộc vào cường độ âm.",
+                        "Độ cao của âm phụ thuộc vào thành phần cấu tạo âm."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 50,
+                    question: "Để bù sự mất máu do bị thương hay mất nước do tiêu chảy, người ta đưa vào cơ thể một lượng dung dịch:",
+                    options: [
+                        "Đẳng trương so với máu.",
+                        "Nồng độ tùy tình trạng người bệnh.",
+                        "Nhược trương so với máu.",
+                        "Ưu trương so với máu."
+                    ],
+                    correctAnswer: 0
+                }
+            ],
+            "Đề 2": [
+                {
+                    id: 201,
+                    question: "Kích thích càng mạnh thì:",
+                    options: [
+                        "Vùng bị kích hoạt trên màng tế bào càng rộng",
+                        "Xung điện động kéo dài càng lâu.",
+                        "Thời gian kéo dài và biên độ xung điện động vẫn không thay đổi",
+                        "Biên độ xung điện thế hoạt động càng lớn"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 202,
+                    question: "Tại vùng màng tế bào, gradient nào sau đây không tồn tại:",
+                    options: [
+                        "Gradient áp suất thẩm thấu",
+                        "Gradient điện thế",
+                        "Gradient áp suất thủy tĩnh",
+                        "Gradient nồng độ"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 203,
+                    question: "Đại lượng độc lập với các điều kiện vật lý của môi trường là:",
+                    options: [
+                        "Tần số âm",
+                        "Bước sóng âm",
+                        "Tốc độ lan truyền âm",
+                        "Cường độ âm"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 204,
+                    question: "Tổn thương sinh học do tác dụng trực tiếp của các bức xạ iôn hoá lên cơ thể sống:",
+                    options: [
+                        "phụ thuộc hàm lượng nước và nhiệt độ trong đối tượng bị chiếu xạ",
+                        "chỉ có thể xảy ra tại khu vực bị chiếu xạ",
+                        "do sự xuất hiện của các gốc tự do và phân tử H2O2 trong đối tượng bị chiếu xạ",
+                        "Mạnh lên khi nồng độ oxy trong đối tượng bị chiếu xạ tăng"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 205,
+                    question: "Xác định phát biểu sai về phát quang:",
+                    options: [
+                        "Tắt ánh sáng kích thích, lân quang có thể tồn tại trong khoảng thời gian đáng kể rồi mới tắt.",
+                        "Bước sóng huỳnh quang, lân quang ngắn hơn bước sóng kích thích.",
+                        "Tắt ánh sáng kích thích, huỳnh quang tắt ngay.",
+                        "Từ trạng thái cơ bản, nguyên tử hấp thụ phôtôn sẽ chuyển sang trạng thái kích thích singlet S*."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 206,
+                    question: "Khi cơ thể chuyển từ trạng thái nghỉ ngơi sang trạng thái hoạt động tích cực, biện pháp quan trọng và hiệu quả nhất mà hệ tuần hoàn đã thực hiện để cung cấp đủ oxi và các chất dinh dưỡng là:",
+                    options: [
+                        "Giảm bớt hoạt động của một số tổ chức không cần thiết nhằm ổn định lưu lượng máu lưu thông trong hệ mạch",
+                        "Tăng áp suất máu để đẩy được một lượng máu lớn vào hệ mạch theo công thức Poadơi.",
+                        "Tăng nhịp đập của tim.",
+                        "Giãn mạch để tăng lưu lượng máu lưu thông theo công thức Poadơi"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 207,
+                    question: "Một người cận thị phải đeo kính đúng là -2 điốp. Điểm cực viễn của mắt người này khi không đeo kính là:",
+                    options: [
+                        "1m",
+                        "2m",
+                        "0,5m",
+                        "1,5m"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 208,
+                    question: "Yếu tố nào không có ý nghĩa đối với dòng chảy của máu trong tĩnh mạch:",
+                    options: [
+                        "Sự co bóp các cơ trơn trên thành tĩnh mạch",
+                        "Lực co bóp của tâm thất",
+                        "Các van trong tĩnh mạch",
+                        "Áp lực ép lên thành tĩnh mạch từ các cơ bao quanh"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 209,
+                    question: "Về kính sửa tật viễn thị:",
+                    options: [
+                        "Mắt viễn thị đeo kính hội tụ để nhìn rõ vật ở xa vô cực như mắt không tật.",
+                        "Mắt viễn thị đeo kính phân kỳ để nhìn rõ vật ở xa vô cực như mắt không tật.",
+                        "Mắt viễn thị đeo kính phân kỳ để nhìn rõ vật ở gần như mắt không tật.",
+                        "Mắt viễn thị đeo kính hội tụ để nhìn rõ vật ở gần như mắt không tật."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 210,
+                    question: "Giữa hai đầu một đoạn mạch trong hệ tuần hoàn yếu tố nào sau đây không thay đổi:",
+                    options: [
+                        "Áp suất",
+                        "Năng lượng",
+                        "Lưu lượng",
+                        "Vận tốc"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 211,
+                    question: "Trong hệ SI, đơn vị để đo liều hấp thụ của các bức xạ iôn hoá là:",
+                    options: [
+                        "J/kg được gọi là Sievert, ký hiệu là Sv.",
+                        "J/kg",
+                        "W/m2",
+                        "W/kg được gọi là Gray, ký hiệu là Gy."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 212,
+                    question: "Về các đặc trưng của cảm giác âm:",
+                    options: [
+                        "Độ to của âm phụ thuộc vào cường độ âm.",
+                        "Độ cao của âm phụ thuộc vào dạng đồ thị của âm",
+                        "Âm sắc phụ thuộc vào tần số âm.",
+                        "Ta nghe được mọi âm có mức cường độ lớn hơn 0 dB"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 213,
+                    question: "Khi ánh sáng có độ rọi lớn (thị giác Photo):",
+                    options: [
+                        "Cả 2 loại tế bào cảm thụ ánh sáng đều tham gia vào quá trình nhìn",
+                        "Chỉ có tế bào que tham gia vào quá trình nhìn.",
+                        "Chỉ có tế bào nón tham gia vào quá trình nhìn",
+                        "Tùy thuộc thời gian ánh sáng tác dụng lên võng mạc, tương ứng sẽ có một loại tế bào cảm thụ ánh sáng tham gia vào quá trình nhìn."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 214,
+                    question: "Áp suất thẩm thấu của một dung dịch:",
+                    options: [
+                        "Không phụ thuộc khả năng phân li hay kết hợp của các chất tan trong dung dịch.",
+                        "Phụ thuộc mật độ tất cả các phần tử phân tán trong dung dịch",
+                        "Phụ thuộc nồng độ mol của chất tan trong dung dịch",
+                        "Càng lớn khi phân tử lượng của chất hoà tan càng lớn."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 215,
+                    question: "Âm đến tai ta càng xa nguồn càng yếu vì:",
+                    options: [
+                        "Cả 3 nguyên nhân còn lại.",
+                        "Phản xạ, khúc xạ, nhiễu xạ…",
+                        "Phân bố năng lượng trên mặt cầu bán kính ngày càng lớn",
+                        "Năng lượng mất bớt do ma sát"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 216,
+                    question: "Màu sắc của ánh sáng đơn sắc không liên quan với:",
+                    options: [
+                        "Biên độ sóng sáng.",
+                        "Chu kỳ sóng sáng.",
+                        "Tần số sóng sáng.",
+                        "Bước sóng."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 217,
+                    question: "Trong ngân hàng máu, để bảo quản hồng cầu người ta dùng dung dịch chứa:",
+                    options: [
+                        "Ưu trương một chút so với hồng cầu",
+                        "Đẳng trương so với hồng cầu.",
+                        "Nhược trương so với hồng cầu.",
+                        "Ưu trương so với hồng cầu."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 218,
+                    question: "Một âm đến tai với mức cường độ âm 10dB. Cường độ âm ấy tại tai là:",
+                    options: [
+                        "4.10⁻¹¹ W/m²",
+                        "2.10⁻¹¹ W/m²",
+                        "3.10⁻¹¹ W/m²",
+                        "1.10⁻¹¹ W/m²"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 219,
+                    question: "Cận thị là tật của mắt mà khi mắt không điều tiết thì:",
+                    options: [
+                        "Ảnh của các vật ở vô cùng hiện lên ở điểm cực viễn của mắt.",
+                        "Tiêu điểm của mắt nằm trước võng mạc.",
+                        "Không nhìn rõ những vật ở gần.",
+                        "Tiêu điểm của mắt nằm sau võng mạc."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 220,
+                    question: "Dòng điện dễ gây tổn thương cho cơ thể sống là do:",
+                    options: [
+                        "Cơ và thần kinh rất nhạy cảm với kích thích điện",
+                        "Dòng điện gây hiệu ứng nhiệt",
+                        "Cơ thể là môi trường dẫn điện tốt",
+                        "Cả ba phương án trên"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 221,
+                    question: "Chọn cụm từ thích hợp: Tác dụng quang động lực là sự tổn thương không phục hồi ......................của đối tượng sinh vật dưới sự tác dụng của ánh sáng với sự có mặt của ôxi và chất hoạt hoá.",
+                    options: [
+                        "Chức năng sinh lý",
+                        "Một số mô và cơ quan.",
+                        "Một số chức năng sinh lý và cấu trúc.",
+                        "Một số tế bào."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 222,
+                    question: "Đối với một hệ cô lập để tự diễn biến ta thấy:",
+                    options: [
+                        "Năng lượng tự do của hệ luôn luôn tăng.",
+                        "Tính trật tự của hệ không tăng.",
+                        "Entropy của hệ luôn luôn giảm.",
+                        "Các gradient trong hệ tăng lên"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 223,
+                    question: "Điện tâm đồ của người này so với người khác:",
+                    options: [
+                        "Đồng nhất về thời khoảng của cùng một đơn sóng bất kì.",
+                        "Luôn giống nhau về thành phần các đơn sóng trong một chu kì điện tim.",
+                        "Đồng nhất về hình dạng của cùng một đơn sóng bất kì.",
+                        "Khác nhau về biên độ của cùng một đơn sóng nào đó."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 224,
+                    question: "Có 4 chùm hạt α, β+, β-, γ cùng xuyên vào tấm chì dày 5 cm, sau tấm chì ta thấy còn có các loại hạt:",
+                    options: [
+                        "Tia γ",
+                        "Không còn loại nào.",
+                        "β+, β- và tia γ",
+                        "γ và β-"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 225,
+                    question: "Năng lượng của photon:",
+                    options: [
+                        "giảm khi truyền trong một môi trường hấp thụ;",
+                        "giảm dần theo thời gian.",
+                        "không phụ thuộc vào khoảng cách tới nguồn;",
+                        "giảm khi khoảng cách tới nguồn tăng;"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 226,
+                    question: "Xác định điều sai trong các phát biểu về tác dụng gián tiếp của bức xạ ion hoá lên cơ thể sống:",
+                    options: [
+                        "Tổn thương do tác dụng gián tiếp dừng lại khi chiếu xạ chấm dứt.",
+                        "H2O2 là một chất ôxy hoá rất mạnh nên trong tổ chức có H2O2 nó sẽ phá huỷ phần lớn các phân tử hữu cơ ở đó.",
+                        "Nếu hàm lượng O2 trong môi trường càng nhiều thì bức xạ iôn hoá càng dễ tạo H2O2.",
+                        "Các gốc tự do tạo ra phát tán ra xa vùng bị chiếu xạ đầu tiên và tiếp tục gây hại ."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 227,
+                    question: "Hiệu ứng ôxy là khái niệm về ảnh hưởng của ........(I)............ có trong môi trường chiếu xạ lên tổn thương sinh học có thể xảy ra. Người ta thấy trong một phạm vi nhất định tổn thương đó .......(II)............ khi .........(III)............",
+                    options: [
+                        "I : lượng ôxy tổng cộng ; II : giảm ; III : lượng ôxy tổng cộng tăng",
+                        "I : lượng ôxy tổng cộng ; II : giảm ; III : nồng độ ôxy giảm",
+                        "I : nồng độ ôxy ; II : tăng ; III : nồng độ ôxy giảm",
+                        "I : nồng độ ôxy ; II : tăng ; III : nồng độ ôxy tăng"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 228,
+                    question: "Dòng điện xoay chiều được dùng trong các ứng dụng sau:",
+                    options: [
+                        "Cấp cứu rối loạn hay ngưng tim",
+                        "Điện di dược chất",
+                        "Phẫu thuật điện",
+                        "Galvani liệu pháp"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 229,
+                    question: "Một trong những điều kiện để xảy ra tác dụng quang động lực là chất hoạt hóa (chất màu) có:",
+                    options: [
+                        "Phổ tác dụng trùng với phổ hấp thụ của cơ chất.",
+                        "Phổ hấp thụ trùng với phổ hấp thụ của cơ chất.",
+                        "Khả năng lân quang.",
+                        "Khả năng huỳnh quang."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 230,
+                    question: "Nhận xét về quá trình vận chuyển thụ động vật chất qua màng tế bào:",
+                    options: [
+                        "Quá trình vận chuyển thụ động luôn cần sự tham gia của chất mang",
+                        "Khuếch tán đơn giản là sự vận chuyển do chênh lệch nồng độ",
+                        "Năng lượng chi phí cho quá trình vận chuyển thụ động được lấy từ năng lượng dự trữ trong gradient của protein chất mang.",
+                        "Sự vận chuyển một chất được quyết định bởi nhu cầu của tế bào"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 231,
+                    question: "Vận tốc truyền sóng cơ học trong một môi trường phụ thuộc vào:",
+                    options: [
+                        "Năng lượng mà sóng chuyên chở.",
+                        "Tần số sóng",
+                        "Tính chất của môi trường.",
+                        "Biên độ dao động của các phân tử môi trường."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 232,
+                    question: "Về tính chất sinh nhiệt của cơ thể:",
+                    options: [
+                        "Mọi phản ứng hóa sinh trong cơ thể đều kéo theo việc sinh nhiệt.",
+                        "Không phải mọi quá trình sinh công trong cơ thể đều kèm theo sinh nhiệt",
+                        "Nguồn năng lượng duy nhất con người dùng cho các hoạt động sống của cơ thể là thức ăn.",
+                        "Năng lượng dùng cho mọi hoạt động sinh công của cơ thể cuối cùng đều biến thành nhiệt tỏa ra"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 233,
+                    question: "Tổng quát các quá trình vận chuyển nước giữa máu và dịch kẽ mô qua thành mao mạch:",
+                    options: [
+                        "Ở đoạn đầu phía tĩnh mạch nhỏ: quá trình lọc từ máu ( dịch mô trội hơn so với thẩm thấu từ dịch mô ( máu",
+                        "Ở đoạn đầu phía tĩnh mạch nhỏ: quá trình thẩm thấu từ dịch mô ( máu trội hơn so với lọc từ máu ( dịch mô",
+                        "Ở đoạn đầu phía động mạch nhỏ: quá trình thẩm thấu từ máu ( dịch mô trội hơn so với lọc từ dịch mô ( máu",
+                        "Ở đoạn đầu phía động mạch nhỏ: thẩm thấu ngược từ dịch mô ( máu trội hơn so với quá trình lọc từ máu ( dịch mô"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 234,
+                    question: "Áp suất máu giảm dần từ cửa thất trái đến cửa nhĩ phải, trong đó đoạn mạch đóng góp làm giảm áp suất nhiều nhất là:",
+                    options: [
+                        "Các động mạch nhỏ",
+                        "Các động mạch .",
+                        "Các tĩnh mạch .",
+                        "Các mao mạch"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 235,
+                    question: "Trong các loại đoạn mạch, vận tốc máu tại các mao mạch là nhỏ nhất vì:",
+                    options: [
+                        "Sức cản của các mao mạch là lớn nhất do bán kính lòng mạch nhỏ nhất",
+                        "Tổng thiết diện tất cả các mao mạch lớn nhất so với tổng thiết diện các loại đoạn mạch khác",
+                        "Thiết diện thành mao mạch xấp xỉ hay thậm chí nhỏ hơn kích thước hồng cầu",
+                        "Theo chiều dòng chảy của máu vận tốc giảm dần do ma sát"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 236,
+                    question: "Lực nội ma sát giữa hai lớp chất lỏng chuyển động:",
+                    options: [
+                        "Tỷ lệ nghịch với chênh lệch vận tốc hai lớp chất lỏng.",
+                        "Tỷ lệ thuận nhiệt độ chất lỏng",
+                        "Tỷ lệ nghịch với độ nhớt phụ thuộc bản chất chất lỏng",
+                        "Cả 3 phương án trên đều sai."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 237,
+                    question: "Tế bào sử dụng năng lượng khi thủy phân ATP để: I - sinh công ; II - sinh nhiệt ; III - dự trữ. Ta chọn:",
+                    options: [
+                        "II",
+                        "I và II",
+                        "I và III",
+                        "I"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 238,
+                    question: "Điểm khác nhau giữa điện thế nghỉ và điện thế hoạt động: I) Phạm vi tồn tại; II) Thời gian tồn tại; III) Dấu của điện thế. Ta chọn:",
+                    options: [
+                        "(I) và (II)",
+                        "(I) và (III)",
+                        "(I), (II) và (III)",
+                        "(I) và (III)"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 239,
+                    question: "Khi con người bị chiếu xạ từ các chất phóng xạ bên ngoài cơ thể, tia gây nguy hiểm là:",
+                    options: [
+                        "Tia α",
+                        "Tia β",
+                        "Phụ thuộc khoảng cách tới nguồn",
+                        "Tia γ"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 240,
+                    question: "Yếu tố vật lý ảnh hưởng mạnh nhất đến tác dụng sinh học của chùm bức xạ iôn hoá:",
+                    options: [
+                        "Thành phần môi trường: hàm lượng nước và một số chất khác, ...",
+                        "Sự phân phối thời gian chiếu và suất liều lượng chiếu",
+                        "Bản chất và năng lượng của bức xạ.",
+                        "Liều lượng bức xạ."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 241,
+                    question: "Xác định phát biểu sai về hiệu ứng sinh học của tia phóng xạ đối với cơ thể sống:",
+                    options: [
+                        "Cấu trúc của ADN có thể bị thay đổi tạo ADN dị thường.",
+                        "Tế bào có thể mất khả năng phân chia.",
+                        "Các phân tử protein bị đứt gãy làm giảm khả năng hoạt động chức năng một số mô.",
+                        "Nhân tế bào bị tổn thương ít hơn so với màng."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 242,
+                    question: "Các tật cận thị, viễn thị, loạn thị:",
+                    options: [
+                        "Là các tật của mắt liên quan đến độ nhạy cảm của các tế bào cảm thụ ánh sáng phân bố trên võng mạc.",
+                        "Là các tật của mắt có liên quan với cấu trúc hình học và khả năng khúc xạ của mắt.",
+                        "Là các tật của mắt liên quan đến khả năng nhận biết màu sắc của mắt",
+                        "Là các tật của mắt liên quan đến khả năng phân ly của mắt."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 243,
+                    question: "Trong quá trình phát sinh một xung điện thế hoạt động, sự thiết lập lại trạng thái phân cực ban đầu (pha tái phân cực) trên màng tế bào diễn ra rất nhanh chóng là nhờ:",
+                    options: [
+                        "Hoạt động mạnh lên của các bơm Natri",
+                        "Tính thấm của màng tế bào đối với ion Na+ tăng đột biến.",
+                        "Tính thấm của màng tế bào đối với ion K+ bắt đầu tăng mạnh",
+                        "Vai trò của cả ba yếu tố còn lại"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 244,
+                    question: "Đặc điểm của phương pháp đánh dấu phóng xạ:",
+                    options: [
+                        "Chất đánh dấu phóng xạ có chu kì bán rã dài",
+                        "Chất đánh dấu phóng xạ không tham gia vào quá trình trao đổi chất.",
+                        "Mật độ chất đánh dấu phóng xạ trong cơ thể phản ánh mức độ trao đổi chất",
+                        "chất đánh dấu phóng xạ phát ra tia α"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 245,
+                    question: "Sự trao đổi chất xảy ra ở thành mao mạch có động lực là:",
+                    options: [
+                        "các loại gradient áp suất tồn tại ở hai phía thành mao mạch",
+                        "áp suất dòng chảy của máu",
+                        "áp suất thẩm thấu keo của máu",
+                        "các loại gradient nồng độ tồn tại ở hai phía thành mao mạch"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 246,
+                    question: "Xác định điều sai trong các phát biểu về tác dụng gián tiếp của bức xạ ion hoá lên cơ thể sống:",
+                    options: [
+                        "Các gốc tự do tạo ra phát tán ra xa vùng bị chiếu xạ đầu tiên và tiếp tục gây hại .",
+                        "Nếu hàm lượng O2 trong môi trường càng nhiều thì bức xạ iôn hoá càng dễ tạo H2O2.",
+                        "H2O2 là một chất ôxy hoá rất mạnh nên trong tổ chức có H2O2 nó sẽ phá huỷ phần lớn các phân tử hữu cơ ở đó.",
+                        "Tổn thương do tác dụng gián tiếp dừng lại khi chiếu xạ chấm dứt."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 247,
+                    question: "Trong công nghệ sinh học, chiếu xạ lên sinh vật để........(I)....... các nấm mốc, vi sinh vật gây hại, các tế bào bệnh, .......(II)............ hạt giống cây trồng, .......... (III)........ để tạo giống mới tốt hơn sau khi chọn lọc kết quả chiếu xạ. Ta chọn các cụm từ:",
+                    options: [
+                        "(I) : gây đột biến gen, (II) : kích thích, (III) : (bỏ trống)",
+                        "(I) : kích thích, (II) : tiêu diệt, (III) : gây đột biến gen",
+                        "(I) : tiêu diệt, (II) : kích thích, (III) : gây đột biến gen",
+                        "(I) : kích thích, (II) : gây đột biến gen, (III) : (bỏ trống)"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 248,
+                    question: "Tật khúc xạ của mắt không liên quan với:",
+                    options: [
+                        "Chiết suất các dịch trong mắt",
+                        "Hoạt động của các cơ vòng đỡ thủy tinh thể",
+                        "Độ dài trục trước – sau của mắt",
+                        "Độ nhạy của mắt."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 249,
+                    question: "Mức độ gây nguy hiểm của dòng điện khi đi qua cơ thể chủ yếu được quyết định bởi:",
+                    options: [
+                        "Cường độ dòng điện đi qua cơ thể",
+                        "Đường dẫn truyền qua cơ thể",
+                        "Hiệu điện thế đặt vào cơ thể",
+                        "Tần số của dòng điện"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 250,
+                    question: "Bản chất sự lan truyền điện thế hoạt động là:",
+                    options: [
+                        "Dòng điện trong môi trường điện ly ở hai phía màng tế bào.",
+                        "Sự lan truyền sóng điện từ.",
+                        "Sự lan truyền sóng cơ học trong môi trường đàn hồi.",
+                        "Sự kích hoạt nối tiếp các vùng cạnh nhau trên màng tế bào"
+                    ],
+                    correctAnswer: 3
+                }
+            ],
+            "Đề 3": [
+                                 {
+                    id: 301,
+                    question: "Chọn phát biểu sai khi nhận xét về quá trình cảm thụ ánh sáng ở mắt:",
+                    options: [
+                        "Trong quá trình nhìn quang năng đã biến thành hóa năng.",
+                        "Quá trình nhìn là một quá trình quang sinh.",
+                        "Đại lượng ngưỡng nhìn cho ta khái niệm hiệu suất lượng tử của quá trình nhìn",
+                        "Đường cong nhạy sáng tương đối cho ta khái niệm về phổ tác dụng của quá trình nhìn"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 302,
+                    question: "Hai chất phóng xạ có hằng số phóng xạ lần lượt là λ1, λ2, chu kỳ bán rã là T1, T2. Nếu ........(I) thì .........(II).............",
+                    options: [
+                        "I: T1 / T2 = k ; II : λ1/ λ2 = k^-1",
+                        "I: T1 / T2 = k ; II : λ1/ λ2 = k",
+                        "I: T1 / T2 = k^2 ; II : λ1/ λ2 = k",
+                        "I: T1 / T2 = k ; II : λ1/ λ2 = k^2"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 303,
+                    question: "Điền các thông số còn thiếu trong sơ đồ minh hoạ cấu tạo của con mắt ước lược (giới hạn giữa giác mạc và võng mạc), trong đó S: đỉnh của lưỡng chất cầu tổng hợp, O: quang tâm của lưỡng chất cầu tổng hợp",
+                    options: [
+                        "I: O, II: S, III: 5 mm, IV: 2mm, V: 15 mm",
+                        "I: O, II: S, III: 2 mm, IV: 5mm, V: 15 mm",
+                        "I: S, II: O, III: 2 mm, IV: 5mm, V: 15 mm",
+                        "I: S, II: O, III: 2 mm, IV: 5mm, V: 20 mm"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 304,
+                    question: "Bản chất của tia Gamma là sóng điện từ:",
+                    options: [
+                        "Do hạt nhân phát ra khi điện tử kết hợp với prôton để tạo thành một nơ tron.",
+                        "Do hạt nhân phát ra khi chuyển từ trạng thái kích thích về trạng thái cơ bản.",
+                        "Được phát ra từ hạt nhân làm thay đổi số khối của nó.",
+                        "Được phát ra từ lớp vỏ điện tử khi nguyên tử bị kích thích."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 305,
+                    question: "Một trong những nguyên nhân gây ra tật viễn thị ở mắt là:",
+                    options: [
+                        "Chiết suất của dịch thuỷ tinh giảm",
+                        "Đường kính của con mắt quá dài",
+                        "Độ cong của thuỷ tinh thể ở trạng thái nghỉ nhỏ so với giá trị bình thường",
+                        "Độ cong của thuỷ tinh thể ở trạng thái nghỉ lớn so với giá trị bình thường"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 306,
+                    question: "Đặc điểm của điện trở các hệ thống sống:",
+                    options: [
+                        "Điện trở của các đối tượng sinh vật đối với dòng điện xoay chiều cao hơn so với dòng điện một chiều.",
+                        "Tổng trở của mô gần như không đổi trong khoảng rất rộng của tần số dòng diện",
+                        "Ở trạng thái sinh lý bình thường, điện trở của tế bào và mô không phụ thuộc vào tần số dòng điện xoay chiều đi qua.",
+                        "Đối với dòng xoay chiều có tần số nhất định nào đó, điện trở của tế bào và mô thay đổi theo trạng thái sinh lý. Khi tế bào bị tổn thương hoặc chết thì điện trở tăng lên."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 307,
+                    question: "Một người cận thị phải đeo kính đúng là -2 điốp. Điểm cực viễn của mắt người này khi không đeo kính là:",
+                    options: [
+                        "1m",
+                        "2m",
+                        "1,5m",
+                        "0,5m"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 308,
+                    question: "Cơ chế hình thành điện thế nghỉ: I. giữa môi trường trong và ngoài tế bào tồn tại sự chênh lệch lớn về nồng độ của cả ba loại ion vô cơ Na+, K+, Cl-. II. Ở trạng thái nghỉ, màng tế bào có tính thấm chọn lọc đối với các ion. III. Tế bào luôn có xu hướng đẩy ion dương ra ngoài và thu vào trong ion âm. Ta chọn:",
+                    options: [
+                        "I , II và III",
+                        "I và III",
+                        "II và III",
+                        "I và II"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 309,
+                    question: "Xác định phát biểu sai về chất hoạt hoá (chất màu) trong hiệu ứng quang động lực:",
+                    options: [
+                        "Chất hoạt hoá đóng vai trò chất xúc tác không thể thiếu được, nó là động lực thúc đẩy sự tiến triển của phản ứng.",
+                        "Chất hoạt hoá có cấu trúc vòng, có liên kết đôi và có khả năng lân quang.",
+                        "Sự liên hợp giữa chất màu với ánh sáng và O2 là điều kiện không thể thiếu để gây nên tác dụng quang động lực.",
+                        "Chất hoạt hoá có ái lực lớn đối với O2 và nhỏ đối với chất khử."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 310,
+                    question: "Các đơn vị đo hoạt độ phóng xạ:",
+                    options: [
+                        "1Bq = 10 phân rã trong 1 giây.",
+                        "1Ci = 3,7.10^9 Bq",
+                        "1mCi = 3,7.10^6 Bq",
+                        "1 microCi = 3,7.10^4 Bq"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 311,
+                    question: "Về mắt cận, viễn thị và mắt già:",
+                    options: [
+                        "Mắt già, thuỷ tinh thể có bán kính cong lớn nên nhìn được vật ở xa.",
+                        "Mắt viễn thị khi nhìn vật ở rất xa đã phải điều tiết.",
+                        "Mắt viễn thị là mắt khi không điều tiết tiêu điểm của mắt nằm trước võng mạc.",
+                        "Mắt cận thị là mắt khi không điều tiết tiêu điểm của mắt nằm sau võng mạc."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 312,
+                    question: "Ở điện tâm đồ bình thường:",
+                    options: [
+                        "Khoảng ST tương ứng thời kỳ kích thích bao trùm tất cả các cơ tim.",
+                        "Khoảng TPU biểu hiện thời gian tim nghỉ, không có dòng điện tim",
+                        "Khoảng PQ biểu hiện sự kích thích của tâm nhĩ.",
+                        "Khoảng RS biểu hiện sự kích thích của tâm thất."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 313,
+                    question: "Mắt viễn thị:",
+                    options: [
+                        "Vật ở vô cực, mắt viễn thị nhìn rõ không cần điều tiết.",
+                        "Mắt viễn thị dù đeo kính đúng số vẫn phải điều tiết mới nhìn rõ vật ở điểm cực cận.",
+                        "Mắt viễn thị phải sửa bằng kính có độ tụ âm.",
+                        "Khi không điều tiết, tiêu điểm nằm trước võng mạc."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 314,
+                    question: "Yếu tố nào không ảnh hưởng đến cảm giác màu sắc của một vật ở cơ quan cảm thụ ánh sáng ở người:",
+                    options: [
+                        "Cường độ ánh sáng",
+                        "Thời gian ánh sáng tác dụng lên mắt",
+                        "Tính chất hấp thụ và phản xạ ánh sáng của vật",
+                        "Kích thước vật quan sát"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 315,
+                    question: "Mắt điều tiết mạnh nhất khi quan sát vật đặt ở:",
+                    options: [
+                        "Trong giới hạn nhìn rõ của mắt;",
+                        "Cách mắt 25cm.",
+                        "Điểm cực viễn;",
+                        "Điểm cực cận;"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 316,
+                    question: "Hiện tượng phản xạ toàn phần có thể xảy ra đối với ánh sáng đi từ môi trường thứ nhất (chiết suất n1) sang môi trường thứ hai (chiết suất n2) khi:",
+                    options: [
+                        "Góc tới < góc giới hạn phản xạ toàn phần.",
+                        "n1 < n2",
+                        "n1 = n2",
+                        "n1 > n2"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 317,
+                    question: "Về viễn điểm và cận điểm, ta thấy:",
+                    options: [
+                        "Điểm cực viễn là vị trí vật mà mắt nhìn thấy khi không điều tiết.",
+                        "Khi mắt nhìn vật đặt ở vị trí điểm cực cận (cận điểm) thì thuỷ tinh thể có độ tụ nhỏ nhất.",
+                        "Điểm cực viễn (viễn điểm) là vị trí vật xa nhất mà mắt có thể nhìn thấy.",
+                        "Khi mắt nhìn vật đặt ở vị trí điểm cực cận thì bán kính thuỷ tinh thể lớn nhất"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 318,
+                    question: "Màu sắc của ánh sáng đơn sắc không liên quan với:",
+                    options: [
+                        "Chu kỳ sóng sáng",
+                        "Tần số sóng sáng",
+                        "Bước sóng",
+                        "Biên độ sóng sáng"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 319,
+                    question: "Nhận xét về tương tác của hạt vi mô tích điện với vật chất:",
+                    options: [
+                        "Vận tốc hạt vi mô tích điện càng lớn thì xác suất gây iôn hoá càng nhỏ",
+                        "Điện tích hạt vi mô càng lớn thì xác suất gây iôn hoá càng nhỏ",
+                        "Khối lượng hạt vi mô càng lớn thì xác suất gây iôn hoá càng nhỏ",
+                        "Càng về cuối quĩ đạo, mật độ iôn hoá tuyến tính càng nhỏ."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 320,
+                    question: "Sau khi phát ra hạt alpha, nguyên tử mới tạo thành:",
+                    options: [
+                        "Lùi một ô trong bảng tuần hoàn so guyên tử cũ.",
+                        "Mất đi một nơtron.",
+                        "Có số khối kém 1 so hạt nhân cũ.",
+                        "Tiến một ô trong bảng tuần hoàn so nguyên tử cũ."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 321,
+                    question: "Khi ánh sáng có độ rọi lớn (thị giác Photo)",
+                    options: [
+                        "Chỉ có tế bào nón tham gia vào quá trình nhìn",
+                        "Cả 2 loại tế bào cảm thụ ánh sáng đều tham gia vào quá trình nhìn",
+                        "Chỉ có tế bào que tham gia vào quá trình nhìn.",
+                        "Tùy thuộc thời gian ánh sáng tác dụng lên võng mạc, tương ứng sẽ có một loại tế bào cảm thụ ánh sáng tham gia vào quá trình nhìn."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 322,
+                    question: "Đặc điểm của của quá trình lan truyền xung điện thế hoạt động theo sợi thần kinh:",
+                    options: [
+                        "Càng ra xa điểm hưng phấn đầu tiên, biên độ xung điện càng giảm",
+                        "Lan truyền với tốc độ dòng điện.",
+                        "Biên độ được bảo toàn trong quá trình lan truyền",
+                        "Lan truyền không theo hướng nhất định, có thể quay về điểm xuất phát"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 323,
+                    question: "Xác định phát biểu sai về kích thích cơ và thần kinh:",
+                    options: [
+                        "Khi cường độ dòng điện kích thích chưa đạt tới độ lớn nhất định, phản ứng của cơ và thần kinh chỉ xuất hiện tại chỗ đặt điện cực kích thích, biểu hiện bằng sự xuất hiện của một xung điện có biên độ tăng dần theo cường độ kích thích.",
+                        "Khi cường độ dòng điện kích thích đủ lớn, vượt qua ngưỡng kích thích, thì cơ và thần kinh bị hưng phấn biểu hiện bằng sự xuất hiện một điện thế hoạt động lan truyền theo các tổ chức dẫn truyền.",
+                        "Biên độ của điện thế hoạt động càng xa chỗ đặt điện cực càng giảm đi.",
+                        "Biên độ của điện thế hoạt động do các kích thích với cường độ khác nhau gây nên đều có cùng một giá trị."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 324,
+                    question: "Về hiện tượng phóng xạ:",
+                    options: [
+                        "Hạt nhân có thể tự biến đổi thành hạt nhân nguyên tố khác mà không kèm theo sự giải phóng năng lượng.",
+                        "Là hiện tượng hạt nhân phát ra các hạt có khối lượng, điện tích, động năng lớn.",
+                        "Là hiện tượng hạt nhân phát ra các bức xạ ion hoá năng lượng cao",
+                        "Là hiện tượng hạt nhân tự biến đổi cấu trúc thành hạt nhân mới hay chuyển xuống mức năng lượng thấp hơn"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 325,
+                    question: "Xác định phát biểu sai khi nói về các giai đoạn chính của một quá trình quang sinh:",
+                    options: [
+                        "Giai đoạn tích lũy năng lượng thông qua quá trình hấp thụ ánh sáng bởi phân tử bất kỳ của tổ chức sống.",
+                        "Giai đoạn khử trạng thái kích thích phân tử thông qua quá trình quang lý hoặc quang hoá tạo sản phẩm quang hoá không bền vững đầu tiên.",
+                        "Giai đoạn phản ứng tối, trung gian tạo sản phẩm quang hoá bền vững.",
+                        "Giai đoạn xuất hiện các hiệu ứng sinh vật là hệ quả của các quá trình và phản ứng xảy ra trong giai đoạn tối"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 326,
+                    question: "Sơ đồ quá trình tác dụng quang động lực: ánh sáng -> chất cảm ứng -> Trạng thái triplet của chất cảm ứng -> những biến đổi oxi hóa với sự tham gia của cơ chất (thường có O2) -> .................. -> biến đổi có tính chất cấu trúc của những phần tử vĩ mô -> hiệu ứng sinh vật.",
+                    options: [
+                        "Biến đổi vi mô",
+                        "Biến đổi hoá sinh",
+                        "Quang sản phẩm",
+                        "Chất oxi hóa"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 327,
+                    question: "Chọn nhận xét đúng về sự phân rã phóng xạ:",
+                    options: [
+                        "Chu kỳ bán rã của một nguồn phóng xạ dài hay ngắn phụ thuộc bản chất của đồng vị phóng xạ cấu taọ nên nguồn.",
+                        "Một nguồn phóng xạ phát ra số lượng tia phóng xạ trong một đơn vị thời gian không thay đổi theo thời gian.",
+                        "Sự phân rã phóng xạ phụ thuộc vào các điều kiện vật lý và hoá học của môi trường xung quanh.",
+                        "Chu kỳ bán rã của một nguồn phóng xạ thay đổi theo thời gian."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 328,
+                    question: "Bản chất sự lan truyền điện thế hoạt động là",
+                    options: [
+                        "Sự lan truyền sóng điện từ.",
+                        "Sự lan truyền sóng cơ học trong môi trường đàn hồi.",
+                        "Dòng điện trong môi trường điện ly ở hai phía màng tế bào.",
+                        "Sự kích hoạt nối tiếp các vùng cạnh nhau trên màng tế bào"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 329,
+                    question: "Xác định điều sai trong phát biểu: Để thực hiện được vi phẫu tim, não, mắt, chùm tia laser phải:",
+                    options: [
+                        "Có bước sóng ngắn hơn cả tia tử ngoại.",
+                        "Phát xạ liên tục hoặc thành xung.",
+                        "Có mật độ dòng năng lượng lớn.",
+                        "Có tiết diện rất nhỏ."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 330,
+                    question: "Khi tương tác với môi trường vật chất, hạt vi mô tích điện sẽ:",
+                    options: [
+                        "Truyền một phần năng lượng cho mỗi electron của môi trường khi tương tác với electron đó.",
+                        "Truyền toàn bộ năng lượng cho một electron nào đó của môi trường.",
+                        "Gây nên hiệu ứng quang điện.",
+                        "Biến mất sau mỗi tương tác."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 331,
+                    question: "Kính hiển vi có:",
+                    options: [
+                        "Vật kính và thị kính là hai kính lúp đồng trục.",
+                        "Vật kính tiêu cự ngắn, thị kính là kính lúp.",
+                        "Khoảng cách giữa vật và vật kính cố định.",
+                        "Vật kính có vai trò như kính lúp, thị kính có tiêu cự ngắn."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 332,
+                    question: "Xác định phát biểu sai về tổn thương ở mức độ tế bào do bức xạ iôn hoá:",
+                    options: [
+                        "Các phần khác nhau của tế bào có độ nhạy cảm phóng xạ khác nhau",
+                        "Bức xạ iôn hóa làm tổn thương về cấu trúc hoặc trình tự sắp xếp của các phân tử ADN trong gen taọ nên các đột biến gen.",
+                        "Các tế bào bị tổn thương do bức xạ ion hóa không còn khả năng phân chia tạo tế bào mới.",
+                        "Tổn thương màng tế bào: tính thấm chọn lọc bị thay đổi do các protein trên màng bị phá hủy...."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 333,
+                    question: "Chùm tia laser có tính đơn sắc cao là do:",
+                    options: [
+                        "laser được tạo ra trong hộp cộng hưởng.",
+                        "Được phát ra do hầu như tất cả các điện tử cùng chuyển từ một mức năng lượng xuống một mức khác thấp hơn",
+                        "Được phát ra đồng thời từ số lượng lớn nguyên tử.",
+                        "Các photon phát ra từ cùng một loại nguyên tử."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 334,
+                    question: "Năng lượng của photon:",
+                    options: [
+                        "Không phụ thuộc vào khoảng cách tới nguồn;",
+                        "Giảm khi khoảng cách tới nguồn tăng;",
+                        "Giảm khi truyền trong một môi trường hấp thụ;",
+                        "Giảm dần theo thời gian."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 335,
+                    question: "Hiện tượng nào xảy ra trong tập hợp các nguyên tử có liên quan đến sự phát xạ tia lade",
+                    options: [
+                        "Hiện tượng phát xạ huỳnh quang",
+                        "Hiện tượng đảo ngược mật độ cư trú",
+                        "Hiện tượng phát xạ tự phát",
+                        "Hiện tượng phát xạ lân quang"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 336,
+                    question: "Để có được ảnh cộng hưởng từ hạt nhân trên một lớp cắt vuông góc với trục z, ta cần đưa vào hệ hạt nhân dao động",
+                    options: [
+                        "Từ trường bổ xung Bz song song với B0",
+                        "Từ trường bổ xung B1 vuông góc với B0",
+                        "Từ trường mạnh, đều tạo bởi cuộn dây siêu dẫn",
+                        "Từ trường yếu biến thiên theo quy luật hình sin"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 337,
+                    question: "Xác định phát biểu sai về cơ sở của kính hiển vi điện tử:",
+                    options: [
+                        "Điện tử làm màn huỳnh quang phát sáng.",
+                        "Điện tử chuyển động trong điện trường và từ trường bị tác dụng lực làm quĩ đạo lệch đi so phương ban đầu.",
+                        "Chùm điện tử vận tốc v có sóng liên kết với bước sóng ( = h/ mv.",
+                        "Điện tử không bị tiêu bản tán xạ, hấp thụ."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 338,
+                    question: "Ba hạt alpha, beta+, beta- cùng động năng có giá trị bằng năng lượng của phôton Gamma cùng xuyên vào một môi trường vật chất thông thường thì:",
+                    options: [
+                        "Hạt alpha xuyên sâu nhất",
+                        "Hạt beta- xuyên sâu nhất.",
+                        "Hạt beta+ xuyên sâu kém nhất",
+                        "Tia Gamma xuyên sâu nhất"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 339,
+                    question: "Khi sóng ánh sáng truyền từ một môi trường này sang một môi trường khác thì:",
+                    options: [
+                        "Cả tần số lẫn bước sóng đều không đổi;",
+                        "Cả tần số lẫn bước sóng đều thay đổi.",
+                        "Tần số không đổi, nhưng bước sóng thay đổi;",
+                        "Bước sóng không đổi, nhưng tần số thay đổi;"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 340,
+                    question: "Khi xảy ra hiện tượng cộng hưởng từ đối với một tập hợp N hạt nhân, thành phần mômen từ M// có giá trị ….. (I)….. là do …..(II)……",
+                    options: [
+                        "(I): cực đại. (II) Delta N giảm đáng kể",
+                        "(I): bằng không, (II): Delta N giảm đáng kể",
+                        "(I): cực đại, (II): vectơ Mu nghiêng nhiều về phía B1",
+                        "(I): bằng không, (II): vectơ Mu nghiêng nhiều về phía B0"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 341,
+                    question: "Chọn cụm từ thích hợp cho phần trống trong phát biểu sau: Việc phân tích định tính các chất bằng quang phổ hấp thụ phân tử dựa trên mối quan hệ vô cùng khăng khít giữa ....................... và những tính chất quang phổ của chúng.",
+                    options: [
+                        "Tính chất hoá học.",
+                        "Trọng lượng phân tử.",
+                        "Hình dạng phân tử.",
+                        "Bản chất vật chất."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 342,
+                    question: "Trong kỹ thuật chụp hình bằng cộng hưởng từ hạt nhân:",
+                    options: [
+                        "Từ trường, sóng điện từ tần số cao không gây iôn hoá, không gây đột biến cho các tế bào ở cơ thể.",
+                        "Những vật bằng kim loại có trên người của bệnh nhân (mảnh đạn, máy kích thích nhịp tim, đồng hồ...) không gây hệ quả gì.",
+                        "Điện từ trường biến thiên gây dòng cảm ứng trong cơ thể quá ngưỡng kích thích, toả nhiệt tạo những tác dụng phụ nguy hiểm cho cơ thể.",
+                        "Từ trường Bo lớn gấp hàng chục vạn lần từ trường trái đất, gây ảnh hưởng đến trao đổi chất của cơ thể."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 343,
+                    question: "Ứng dụng nào dưới đây không thực hiện được khi dùng phương pháp nguồn chiếu xạ:",
+                    options: [
+                        "Thăm dò chức năng các mô cơ quan.",
+                        "Tiêu diệt tế bào bệnh",
+                        "Định lượng các yếu tố đa, vi lượng trong các mẫu sinh học.",
+                        "Chẩn đoán bệnh"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 344,
+                    question: "Trong hệ SI đơn vị để đo liều lượng hấp thụ của bức xạ iôn hoá là:",
+                    options: [
+                        "Cal/g hoặc kcal/kg được đặt tên là Cu-ri, ký hiệu là Ci.",
+                        "C/kg, được đặt tên là Bêch-cơ-ren, ký hiệu là Bq.",
+                        "eV/g hoặc MeV/kg được đặt tên là Rơnghen, ký hiệu là r.",
+                        "J/kg, được đặt tên là Gray và ký hiệu là Gy."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 345,
+                    question: "Kính lúp là dụng cụ bổ trợ cho mắt, có đặc điểm:",
+                    options: [
+                        "Có tiêu cự lớn hơn 25 cm.",
+                        "Có số bội giác khi ngắm chừng ở vô cực G = lo/f",
+                        "Là thấu kính phân kỳ.",
+                        "Có độ phóng đại dài khi ảnh ngắm chừng ở vô cực k = l0/f"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 346,
+                    question: "Yếu tố vật lý ảnh hưởng mạnh nhất đến tác dụng sinh học của chùm bức xạ iôn hoá:",
+                    options: [
+                        "Bản chất và năng lượng của bức xạ.",
+                        "Sự phân phối thời gian chiếu và suất liều lượng chiếu",
+                        "Liều lượng bức xạ.",
+                        "Thành phần môi trường: hàm lượng nước và một số chất khác, ..."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 347,
+                    question: "Chọn cụm từ cho chỗ trống: Trong phương pháp hiển vi để tăng khả năng phân ly (hoặc độ phóng đại) của thiết bị ta chủ yếu thay đổi ........................",
+                    options: [
+                        "Tính chất môi trường đặt tiêu bản.",
+                        "Bước sóng của chùm tia tới",
+                        "Các thông số của thấu kính",
+                        "Phương pháp xử lý tiêu bản"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 348,
+                    question: "Khi hấp thụ ánh sáng, nguyên tử hay phân tử có thể chuyển từ:",
+                    options: [
+                        "Trạng thái kích thích singlet xuống trạng thái triplet và phát ra năng lượng dư thừa dưới dạng bức xạ nhiệt.",
+                        "Trạng thái triplet lên trạng thái kích thích singlet.",
+                        "Trạng thái cơ bản lên trạng thái kích thích triplet.",
+                        "Trạng thái singlet cơ bản lên trạng thái singlet kích thích."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 349,
+                    question: "Xác định phát biểu sai về hiện tượng phát quang:",
+                    options: [
+                        "Tắt ánh sáng kích thích, huỳnh quang tắt ngay.",
+                        "Thông thường nguyên tử, phân tử tồn tại ở trạng thái kích thích khoảng 10-9 – 10-8 s.",
+                        "Bước sóng lân quang ngắn hơn bước sóng kích thích.",
+                        "Tắt ánh sáng kích thích, lân quang có thể tồn tại trong khoảng thời gian đáng kể rồi mới tắt."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 350,
+                    question: "Giải thích các tính chất của một chùm tia lade",
+                    options: [
+                        "Tính đơn sắc cao có được là do các bức xạ phát ra khi các nguyên tử chuyển từ cùng một mức năng lượng cao xuống một mức thấp hơn.",
+                        "Chùm tia lade có cường độ mạnh là nhờ tính đơn sắc của các tia lade.",
+                        "Chùm tia lade có thể hội tụ vào một điểm là nhờ tính kết hợp của chúng.",
+                        "Chùm tia la de có tính định hướng cao do chúng là những bức xạ cảm ứng"
+                    ],
+                    correctAnswer: 0
+                }
+            ],
+            "Đề 4": [
+                {
+                    id: 401,
+                    question: "Một người cận thị phải đeo kính đúng là -2 điốp. Điểm cực viễn của mắt người này khi không đeo kính là:",
+                    options: ["1m", "1,5m", "2m", "0,5m"],
+                    correctAnswer: 3
+                },
+                {
+                    id: 402,
+                    question: "Bản chất của tia Gamma là sóng điện từ:",
+                    options: [
+                        "Được phát ra từ hạt nhân làm thay đổi số khối của nó.",
+                        "Do hạt nhân phát ra khi chuyển từ trạng thái kích thích về trạng thái cơ bản.",
+                        "Do hạt nhân phát ra khi điện tử kết hợp với prôton để tạo thành một nơ tron.",
+                        "Được phát ra từ lớp vỏ điện tử khi nguyên tử bị kích thích."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 403,
+                    question: "Mắt điều tiết mạnh nhất khi quan sát vật đặt ở:",
+                    options: [
+                        "Cách mắt 25cm.",
+                        "Điểm cực viễn.",
+                        "Điểm cực cận.",
+                        "Trong giới hạn nhìn rõ của mắt."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 404,
+                    question: "Cơ chế hình thành điện thế nghỉ: I. Giữa môi trường trong và ngoài tế bào tồn tại sự chênh lệch lớn về nồng độ của cả ba loại ion vô cơ Na+, K+, Cl-. II. Ở trạng thái nghỉ, màng tế bào có tính thấm chọn lọc đối với các ion. III. Tế bào luôn có xu hướng đẩy ion dương ra ngoài và thu vào trong ion âm. Ta chọn:",
+                    options: [
+                        "II và III",
+                        "I và II",
+                        "I và III",
+                        "I , II và III"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 405,
+                    question: "Trong hệ SI đơn vị để đo liều lượng hấp thụ của bức xạ iôn hoá là:",
+                    options: [
+                        "C/kg, được đặt tên là Bêch-cơ-ren, ký hiệu là Bq.",
+                        "Cal/g hoặc kcal/kg được đặt tên là Cu-ri, ký hiệu là Ci.",
+                        "J/kg, được đặt tên là Gray và ký hiệu là Gy.",
+                        "eV/g hoặc MeV/kg được đặt tên là Rơnghen, ký hiệu là r."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 406,
+                    question: "Chọn phát biểu sai khi nhận xét về quá trình cảm thụ ánh sáng ở mắt:",
+                    options: [
+                        "Quá trình nhìn là một quá trình quang sinh.",
+                        "Trong quá trình nhìn quang năng đã biến thành hóa năng.",
+                        "Đại lượng ngưỡng nhìn cho ta khái niệm hiệu suất lượng tử của quá trình nhìn",
+                        "Đường cong nhạy sáng tương đối cho ta khái niệm về phổ tác dụng của quá trình nhìn"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 407,
+                    question: "Sơ đồ quá trình tác dụng quang động lực: ánh sáng -> chất cảm ứng -> Trạng thái triplet của chất cảm ứng -> những biến đổi oxi hóa với sự tham gia của cơ chất (thường có O2) -> .................. -> biến đổi có tính chất cấu trúc của những phần tử vĩ mô -> hiệu ứng sinh vật.",
+                    options: [
+                        "Chất oxi hóa",
+                        "Quang sản phẩm",
+                        "Biến đổi vi mô",
+                        "Biến đổi hoá sinh"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 408,
+                    question: "3 hạt alpha, beta+, beta- cùng động năng có giá trị bằng năng lượng của phôton gamma cùng xuyên vào một môi trường vật chất thông thường thì:",
+                    options: [
+                        "Hạt beta- xuyên sâu nhất.",
+                        "Hạt beta+ xuyên sâu kém nhất",
+                        "Tia Gamma xuyên sâu nhất",
+                        "Hạt alpha xuyên sâu nhất"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 409,
+                    question: "Đặc điểm của của quá trình lan truyền xung điện thế hoạt động theo sợi thần kinh:",
+                    options: [
+                        "Càng ra xa điểm hưng phấn đầu tiên, biên độ xung điện càng giảm",
+                        "Lan truyền không theo hướng nhất định, có thể quay về điểm xuất phát",
+                        "Biên độ được bảo toàn trong quá trình lan truyền",
+                        "Lan truyền với tốc độ dòng điện."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 410,
+                    question: "Xác định phát biểu sai về chất hoạt hoá (chất màu) trong hiệu ứng quang động lực:",
+                    options: [
+                        "Chất hoạt hoá có ái lực lớn đối với O2 và nhỏ đối với chất khử.",
+                        "Chất hoạt hoá đóng vai trò chất xúc tác không thể thiếu được, nó là động lực thúc đẩy sự tiến triển của phản ứng.",
+                        "Sự liên hợp giữa chất màu với ánh sáng và O2 là điều kiện không thể thiếu để gây nên tác dụng quang động lực.",
+                        "Chất hoạt hoá có cấu trúc vòng, có liên kết đôi và có khả năng lân quang."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 411,
+                    question: "Ở điện tâm đồ bình thường:",
+                    options: [
+                        "Khoảng RS biểu hiện sự kích thích của tâm thất.",
+                        "Khoảng TPU biểu hiện thời gian tim nghỉ, không có dòng điện tim",
+                        "Khoảng PQ biểu hiện sự kích thích của tâm nhĩ.",
+                        "Khoảng ST tương ứng thời kỳ kích thích bao trùm tất cả các cơ tim."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 412,
+                    question: "Về viễn điểm và cận điểm, ta thấy:",
+                    options: [
+                        "Điểm cực viễn là vị trí vật mà mắt nhìn thấy khi không điều tiết.",
+                        "Khi mắt nhìn vật đặt ở vị trí điểm cực cận thì bán kính thuỷ tinh thể lớn nhất",
+                        "Khi mắt nhìn vật đặt ở vị trí điểm cực cận (cận điểm) thì thuỷ tinh thể có độ tụ nhỏ nhất.",
+                        "Điểm cực viễn (viễn điểm) là vị trí vật xa nhất mà mắt có thể nhìn thấy."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 413,
+                    question: "Hai chất phóng xạ có hằng số phóng xạ lần lượt là λ1, λ2, chu kỳ bán rã là T1, T2. Nếu ........(I) thì .........(II).............",
+                    options: [
+                        "I : T1 / T2 = k ; II : λ1/ λ2 = k^-1",
+                        "I : T1 / T2 = k ; II : λ1/ λ2 = k^2",
+                        "I : T1 / T2 = k^2 ; II : λ1/ λ2 = k",
+                        "I : T1 / T2 = k ; II : λ1/ λ2 = k"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 414,
+                    question: "Về hiện tượng phóng xạ:",
+                    options: [
+                        "Hạt nhân có thể tự biến đổi thành hạt nhân nguyên tố khác mà không kèm theo sự giải phóng năng lượng.",
+                        "Là hiện tượng hạt nhân phát ra các hạt có khối lượng, điện tích, động năng lớn.",
+                        "Là hiện tượng hạt nhân tự biến đổi cấu trúc thành hạt nhân mới hay chuyển xuống mức năng lượng thấp hơn",
+                        "Là hiện tượng hạt nhân phát ra các bức xạ ion hoá năng lượng cao"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 415,
+                    question: "Một trong những nguyên nhân gây ra tật viễn thị ở mắt là:",
+                    options: [
+                        "Đường kính của con mắt quá dài",
+                        "Độ cong của thuỷ tinh thể ở trạng thái nghỉ lớn so với giá trị bình thường",
+                        "Chiết suất của dịch thuỷ tinh giảm",
+                        "Độ cong của thuỷ tinh thể ở trạng thái nghỉ nhỏ so với giá trị bình thường"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 416,
+                    question: "Xác định phát biểu sai về kích thích cơ và thần kinh:",
+                    options: [
+                        "Biên độ của điện thế hoạt động do các kích thích với cường độ khác nhau gây nên đều có cùng một giá trị.",
+                        "Biên độ của điện thế hoạt động càng xa chỗ đặt điện cực càng giảm đi.",
+                        "Khi cường độ dòng điện kích thích chưa đạt tới độ lớn nhất định, phản ứng của cơ và thần kinh chỉ xuất hiện tại chỗ đặt điện cực kích thích, biểu hiện bằng sự xuất hiện của một xung điện có biên độ tăng dần theo cường độ kích thích.",
+                        "Khi cường độ dòng điện kích thích đủ lớn, vượt qua ngưỡng kích thích, thì cơ và thần kinh bị hưng phấn biểu hiện bằng sự xuất hiện một điện thế hoạt động lan truyền theo các tổ chức dẫn truyền."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 417,
+                    question: "Khi ánh sáng có độ rọi lớn (thị giác Photo)",
+                    options: [
+                        "Tùy thuộc thời gian ánh sáng tác dụng lên võng mạc, tương ứng sẽ có một loại tế bào cảm thụ ánh sáng tham gia vào quá trình nhìn.",
+                        "Chỉ có tế bào que tham gia vào quá trình nhìn.",
+                        "Chỉ có tế bào nón tham gia vào quá trình nhìn",
+                        "Cả 2 loại tế bào cảm thụ ánh sáng đều tham gia vào quá trình nhìn"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 418,
+                    question: "Mắt viễn thị:",
+                    options: [
+                        "Mắt viễn thị dù đeo kính đúng số vẫn phải điều tiết mới nhìn rõ vật ở điểm cực cận.",
+                        "Khi không điều tiết, tiêu điểm nằm trước võng mạc.",
+                        "Mắt viễn thị phải sửa bằng kính có độ tụ âm.",
+                        "Vật ở vô cực, mắt viễn thị nhìn rõ không cần điều tiết."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 419,
+                    question: "Chọn cụm từ cho chỗ trống: Trong phương pháp hiển vi để tăng khả năng phân ly (hoặc độ phóng đại) của thiết bị ta chủ yếu thay đổi .......................",
+                    options: [
+                        "Bước sóng của chùm tia tới",
+                        "Các thông số của thấu kính",
+                        "Tính chất môi trường đặt tiêu bản.",
+                        "Phương pháp xử lý tiêu bản"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 420,
+                    question: "Xác định phát biểu sai khi nói về các giai đoạn chính của một quá trình quang sinh:",
+                    options: [
+                        "Giai đoạn phản ứng tối, trung gian tạo sản phẩm quang hoá bền vững.",
+                        "Giai đoạn khử trạng thái kích thích phân tử thông qua quá trình quang lý hoặc quang hoá tạo sản phẩm quang hoá không bền vững đầu tiên.",
+                        "Giai đoạn xuất hiện các hiệu ứng sinh vật là hệ quả của các quá trình và phản ứng xảy ra trong giai đoạn tối",
+                        "Giai đoạn tích lũy năng lượng thông qua quá trình hấp thụ ánh sáng bởi phân tử bất kỳ của tổ chức sống."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 421,
+                    question: "Điền các thông số còn thiếu trong sơ đồ minh hoạ cấu tạo của con mắt ước lược (giới hạn giữa giác mạc và võng mạc), trong đó S: đỉnh của lưỡng chất cầu tổng hợp, O: quang tâm của lưỡng chất cầu tổng hợp",
+                    options: [
+                        "I: O, II: S, III: 2 mm, IV: 5mm, V: 15 mm",
+                        "I: O, II: S, III: 5 mm, IV: 2mm, V: 15 mm",
+                        "I: S, II: O, III: 2 mm, IV: 5mm, V: 20 mm",
+                        "I: S, II: O, III: 2 mm, IV: 5mm, V: 15 mm"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 422,
+                    question: "Về mắt cận, viễn thị và mắt già:",
+                    options: [
+                        "Mắt viễn thị khi nhìn vật ở rất xa đã phải điều tiết.",
+                        "Mắt cận thị là mắt khi không điều tiết tiêu điểm của mắt nằm sau võng mạc.",
+                        "Mắt già, thuỷ tinh thể có bán kính cong lớn nên nhìn được vật ở xa.",
+                        "Mắt viễn thị là mắt khi không điều tiết tiêu điểm của mắt nằm trước võng mạc."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 423,
+                    question: "Xác định phát biểu sai về tổn thương ở mức độ tế bào do bức xạ iôn hoá:",
+                    options: [
+                        "Tổn thương màng tế bào: tính thấm chọn lọc bị thay đổi do các protein trên màng bị phá hủy....",
+                        "Bức xạ iôn hóa làm tổn thương về cấu trúc hoặc trình tự sắp xếp của các phân tử ADN trong gen taọ nên các đột biến gen.",
+                        "các tế bào bị tổn thương do bức xạ ion hóa không còn khả năng phân chia tạo tế bào mới.",
+                        "Các phần khác nhau của tế bào có độ nhạy cảm phóng xạ khác nhau"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 424,
+                    question: "Chọn cụm từ thích hợp cho phần trống trong phát biểu sau: Việc phân tích định tính các chất bằng quang phổ hấp thụ phân tử dựa trên mối quan hệ vô cùng khăng khít giữa ................... và những tính chất quang phổ của chúng.",
+                    options: [
+                        "Tính chất hoá học.",
+                        "Bản chất vật chất.",
+                        "Trọng lượng phân tử.",
+                        "Hình dạng phân tử."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 425,
+                    question: "Để có được ảnh cộng hưởng từ hạt nhân trên một lớp cắt vuông góc với trục z, ta cần đưa vào hệ hạt nhân dao động",
+                    options: [
+                        "Từ trường bổ xung [Công thức]",
+                        "Từ trường mạnh, đều tạo bởi cuộn dây siêu dẫn",
+                        "Từ trường bổ xung Bz song song với B0",
+                        "Từ trường yếu biến thiên theo quy luật hình sin"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 426,
+                    question: "Khi hấp thụ ánh sáng, nguyên tử hay phân tử có thể chuyển từ:",
+                    options: [
+                        "Trạng thái triplet lên trạng thái kích thích singlet.",
+                        "Trạng thái kích thích singlet xuống trạng thái triplet và phát ra năng lượng dư thừa dưới dạng bức xạ nhiệt.",
+                        "Trạng thái cơ bản lên trạng thái kích thích triplet.",
+                        "Trạng thái singlet cơ bản lên trạng thái singlet kích thích."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 427,
+                    question: "Xác định phát biểu sai về cơ sở của kính hiển vi điện tử:",
+                    options: [
+                        "Chùm điện tử vận tốc v có sóng liên kết với bước sóng ( = h/ mv.",
+                        "Điện tử chuyển động trong điện trường và từ trường bị tác dụng lực làm quĩ đạo lệch đi so phương ban đầu.",
+                        "Điện tử không bị tiêu bản tán xạ, hấp thụ.",
+                        "Điện tử làm màn huỳnh quang phát sáng."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 428,
+                    question: "Yếu tố vật lý ảnh hưởng mạnh nhất đến tác dụng sinh học của chùm bức xạ iôn hoá:",
+                    options: [
+                        "Sự phân phối thời gian chiếu và suất liều lượng chiếu",
+                        "Bản chất và năng lượng của bức xạ.",
+                        "Liều lượng bức xạ.",
+                        "Thành phần môi trường: hàm lượng nước và một số chất khác, ..."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 429,
+                    question: "Chùm tia laser có tính đơn sắc cao là do:",
+                    options: [
+                        "Được phát ra do hầu như tất cả các điện tử cùng chuyển từ một mức năng lượng xuống một mức khác thấp hơn",
+                        "Được phát ra đồng thời từ số lượng lớn nguyên tử.",
+                        "Laser được tạo ra trong hộp cộng hưởng.",
+                        "Các photon phát ra từ cùng một loại nguyên tử."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 430,
+                    question: "Xác định phát biểu sai về hiện tượng phát quang:",
+                    options: [
+                        "Tắt ánh sáng kích thích, lân quang có thể tồn tại trong khoảng thời gian đáng kể rồi mới tắt.",
+                        "Thông thường nguyên tử, phân tử tồn tại ở trạng thái kích thích khoảng 10-9 – 10-8 s.",
+                        "Tắt ánh sáng kích thích, huỳnh quang tắt ngay.",
+                        "Bước sóng lân quang ngắn hơn bước sóng kích thích."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 431,
+                    question: "Độ nhớt của một chất lỏng phụ thuộc vào:",
+                    options: [
+                        "Bản chất của chất lỏng.",
+                        "Kích thước hình học của ống dẫn chất lỏng đang xét.",
+                        "Độ giảm áp suất giữa hai đầu ống theo qui luật Poa-dơi.",
+                        "Cả 3 yếu tố trên."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 432,
+                    question: "Áp suất máu giảm dần từ cửa thất trái đến cửa nhĩ phải thì khoảng làm giảm áp suất nhiều nhất là:",
+                    options: [
+                        "Động mạch chủ.",
+                        "Mao động mạch và mao tĩnh mạch.",
+                        "Tĩnh mạch chủ.",
+                        "Tiểu động mạch và tiểu tĩnh mạch."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 433,
+                    question: "Áp suất phụ tác dụng lên mặt thoáng cong của chất lỏng:",
+                    options: [
+                        "Có chiều độc lập với sự định hướng của mặt cong.",
+                        "Có độ lớn phụ thuộc vào bản chất của chất lỏng và độ cong của mặt thoáng.",
+                        "Có độ lớn tỷ lệ nghịch với khối lượng riêng của chất lỏng và độ cong của mặt thoáng.",
+                        "Có phương luôn tiếp xúc với mặt thoáng."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 434,
+                    question: "Sự hình thành cảm giác âm ở cơ quan thính giác người.",
+                    options: [
+                        "Âm có tần số lớn tạo ra chuyển động xoáy kích thích vị trí gần với đỉnh ốc tai của màng đáy.",
+                        "Cảm giác độ cao hình thành phụ thuộc vào vị trí sóng âm kích thích màng đáy ở tai trong",
+                        "Độ to của âm có được căn cứ vào tốc độ lan truyền của xung kích thích về thần kinh trung ương.",
+                        "Âm sắc hình thành trên cơ sở số lượng xung thần kinh được truyền tới thần kinh trung ương."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 435,
+                    question: "Qua một môi trường, mức độ giảm của cường độ chùm siêu âm song song:",
+                    options: [
+                        "Tỷ lệ thuận chiều dày môi trường",
+                        "Không phụ thuộc tần số siêu âm",
+                        "Tỷ lệ nghịch mật độ môi trường",
+                        "Càng lớn khi tốc độ lan truyền siêu âm càng nhỏ."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 436,
+                    question: "Các cơ chế vận chuyển vật chất qua màng tế bào",
+                    options: [
+                        "Khuếch tán đơn giản qua lớp lipid kép đối với các phân tử khí, phân tử thích nước và có kích thước nhỏ",
+                        "Vận chuyển tích cực với sự giúp đỡ của các chất mang và năng lượng dự trữ trong các loại gradient ở vùng màng.",
+                        "Vận chuyển thụ động với sự giúp đỡ của các protein vận chuyển và năng lượng ATP",
+                        "Khuếch tán qua các kênh protein và kênh ion dành cho các phân tử thích nước và các ion"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 437,
+                    question: "Cân bằng Đônan xảy ra khi:",
+                    options: [
+                        "Có số phân tử qua lại màng từ hai phía bằng nhau.",
+                        "Có sự trung hoà về điện ở hai phía của màng (gần màng)",
+                        "Trong hai dung dịch điện ly ngăn cách bởi màng bán thấm có ít nhất một loại đại phân tử không đi qua được màng.",
+                        "Phải có đủ cả 3 điều A, B, C"
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 438,
+                    question: "Hệ số khuếch tán không phụ thuộc vào yếu tố nào?",
+                    options: [
+                        "Gradien nồng độ.",
+                        "Nhiệt độ của dung dịch",
+                        "Khối lượng và hình dạng phân tử",
+                        "Độ nhớt của dung môi"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 439,
+                    question: "Khi cơ thể chuyển từ trạng thái nghỉ ngơi sang trạng thái hoạt động tích cực, biện pháp quan trọng và hiệu quả nhất mà hệ tuần hoàn đã thực hiện để cung cấp đủ oxi và các chất dinh dưỡng là:",
+                    options: [
+                        "Giãn mạch để tăng lưu lượng máu lưu thông theo công thức Poadơ",
+                        "Tăng nhịp đập của tim.",
+                        "Tăng áp suất máu để đẩy được một lượng máu lớn vào hệ mạch theo công thức Poadơ.",
+                        "Giảm bớt hoạt động của một số tổ chức không cần thiết nhằm ổn định lưu lượng máu lưu thông trong hệ mạch"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 440,
+                    question: "Nếu con người từ tư thế nằm chuyển sang tư thế đứng",
+                    options: [
+                        "ở kỳ tâm trương lượng máu từ các tĩnh mạch dưới đổ về tim bị giảm bớt.",
+                        "do tác dụng của trọng lực áp suất máu ở chi dưới thay đổi đáng kể.",
+                        "áp suất máu do tim co bóp tăng lên.",
+                        "khối lượng máu được tim đẩy ra sau một lần co bóp không đổi."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 441,
+                    question: "Về siêu âm",
+                    options: [
+                        "Một thanh sắt từ khi bị từ hóa thì chiều dài của nó tăng lên một chút, đó là hiện tượng từ giảo.",
+                        "Các chất dùng làm nguồn phát và thu siêu âm có khả năng biến dạng lớn dưới tác dụng của ngoại lực và có khả năng đàn hồi lớn.",
+                        "Nguyên tắc phát siêu âm dựa vào hiệu ứng áp điện thuận và hiện tượng từ giảo.",
+                        "Nguyên tắc thu siêu âm dựa vào hiệu ứng áp điện nghịch."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 442,
+                    question: "Hai âm phức tạp khác nhau mà có cùng tần số, độ to thì khác nhau bởi:",
+                    options: [
+                        "Biên độ áp suất gây ra tại màng nhĩ.",
+                        "Thành phần dao động điều hoà hình sin đã tạo nên mỗi âm.",
+                        "Độ cao của âm",
+                        "Cả A, B, C."
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 443,
+                    question: "Sự trao đổi chất xảy ra ở thành mao mạch có động lực là",
+                    options: [
+                        "gradien áp suất thủy tĩnh, thủy động ở thành mao mạch",
+                        "các loại gradien áp suất ở thành mao mạch",
+                        "gradien áp suất thẩm thấu ở thành mao mạch",
+                        "các loại gradien nồng độ ở thành mao mạch"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    id: 444,
+                    question: "Người ta thấy các đặc trưng của cảm giác âm phụ thuộc vào các đặc trưng vật lý:",
+                    options: [
+                        "Âm sắc phụ thuộc vào tần số âm.",
+                        "Độ to không phụ thuộc vào tần số âm.",
+                        "Độ cao của âm phụ thuộc vào thành phần cấu tạo âm.",
+                        "Độ to của âm phụ thuộc vào cường độ âm."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 445,
+                    question: "Trong hiệu ứng Doppler, f là tần số sóng từ nguồn phát ra, f’ là tần số sóng máy thu sẽ thu được, ta có: I. Nguồn và máy thu đi xa nhau f’ > f; II. Nguồn và máy thu đi lại gần nhau f’ < f. Ta thấy:",
+                    options: [
+                        "I và II đều sai",
+                        "I sai II đúng",
+                        "I và II đều đúng",
+                        "I đúng II sai"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 446,
+                    question: "Hiện tượng nào có liên quan đến bệnh màng phổi ở trẻ sơ sinh đẻ non:",
+                    options: [
+                        "Hiện tượng căng mặt ngoài",
+                        "Hiện tượng mao dẫn",
+                        "Hiện tượng tràn khí màng phổi",
+                        "Hiện tượng thẩm thấu"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 447,
+                    question: "Tính chất của chùm siêu âm:",
+                    options: [
+                        "Sóng siêu âm khi lan truyền cũng có các tính chất tương tự như sóng âm",
+                        "Trong quá trình lan truyền của sóng siêu âm khi gặp các vật cản có thể xảy ra hiện tượng nhiễu xạ",
+                        "Với kích thước và hình dạng thích hợp của đầu phát có thể thu được chùm siêu âm có độ phân kỳ nhỏ",
+                        "Với 2 chùm siêu âm có cường độ như nhau, chùm siêu âm có tần số càng lớn thì khả năng xuyên sâu vào cơ thể càng lớn"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 448,
+                    question: "Sóng âm:",
+                    options: [
+                        "Là sóng ngang lan truyền được trong mọi môi trường, kể cả chân không.",
+                        "Là sóng ngang lan truyền được trong môi trường đàn hồi, có tần số từ 16Hz đến 20.000Hz.",
+                        "Là sóng dọc lan truyền trong môi trường đàn hồi, có tần số từ 16Hz đến 20.000Hz.",
+                        "Là sóng dọc lan truyền được trong mọi môi trường."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 449,
+                    question: "Dung dịch:",
+                    options: [
+                        "Tế bào để trong dung dịch nhược trương sẽ bị mất nước và teo lại.",
+                        "Dung dịch ưu trương có áp suất thẩm thấu nhỏ hơn áp suất thẩm thấu của dung dịch chuẩn.",
+                        "Dung dịch đẳng trương có áp suất thẩm thấu bằng áp suất thẩm thấu của dung dịch chuẩn.",
+                        "Dung dịch nhược trương có áp suất thẩm thấu lớn hơn áp suất thẩm thấu của dung dịch chuẩn."
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    id: 450,
+                    question: "Huyết áp của một người bình thường có giá trị 120/80 mm Hg",
+                    options: [
+                        "Giá trị cận dưới 80 mm Hg là huyết áp tâm trương tương ứng với giá trị hiển thị trên áp kế khi người bác sĩ nghe thấy tiếng đập đầu tiên.",
+                        "Giá trị cận dưới 80 mm Hg là huyết áp tâm trương tương ứng với giá trị hiển thị trên áp kế khi người bác sĩ nghe thấy tiếng đập đều đặn.",
+                        "Giá trị cận trên 120 mm Hg là huyết áp tâm thu tương ứng với giá trị hiển thị trên áp kế khi người bác sĩ nghe thấy những tiếng đập đầu tiên.",
+                        "Giá trị cận trên 120 mm Hg là huyết áp tâm thu tương ứng với giá trị hiển thị trên áp kế khi người bác sĩ nghe thấy tiếng đập vừa kết thúc."
+                    ],
+                    correctAnswer: 2
+                }
+            ],
+            "Đề 5": [
+                {
+                    id: 501,
+                    question: "Xác định phát biểu sai về tác dụng của dòng một chiều lên cơ thể:",
+                    options: [
+                        "Làm giảm đau do làm tăng tính đáp ứng của thần kinh cảm giác.",
+                        "Gây nên phản ứng hoá học, tạo chất mới ở vùng cơ thể dưới các điện cực.",
+                        "Dẫn iôn vào trong hoặc ra ngoài cơ thể theo chiều xác định.",
+                        "Làm dãn mạch, tăng cường khả năng trao đổi chất ở mô, cơ quan có dòng đi qua."
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    id: 502,
+                    question: "Áp suất máu giảm dần từ cửa thất trái đến cửa nhĩ phải thì khoảng làm giảm áp suất nhiều nhất là:",
+                    options: [
+                        "Động mạch chủ.",
+                        "Mao động mạch và mao tĩnh mạch.",
+                        "Tĩnh mạch chủ.",
+                        "Tiểu động mạch và tiểu tĩnh mạch."
+                    ],
+                    correctAnswer: 3
+                },
+                {
+                    id: 503,
+                    question: "Điểm cực cận của mắt là:",
+                    options: [
+                        "Điểm trên trục nhìn cách mắt 25cm.",
+                        "Điểm gần nhất trên trục nhìn mà đặt vật ở đó, mắt còn nhìn thấy rõ, khi điều tiết tối đa.",
+                        "Điểm gần nhất mà mắt còn nhìn rõ.",
+                        "Điểm gần nhất mà mắt người không cần điều tiết còn thấy rõ."
+                    ],
+                    correctAnswer: 1
+                }
+            ]
+        };
+
+        // --- COMPONENTS ---
+
+        const { useState, useEffect } = React;
+
+        const ProgressBar = ({ current, total }) => {
+            const width = Math.min(100, Math.max(0, ((current + 1) / total) * 100));
+            return (
+                <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                    <div 
+                        className="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-out" 
+                        style={{ width: `${width}%` }}
+                    ></div>
+                </div>
+            );
+        };
+
+        const QuestionPalette = ({ questions, currentIndex, userAnswers, onSelectQuestion, onClose }) => {
+            return (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-end">
+                    <div className="w-80 bg-white h-full shadow-2xl p-6 overflow-y-auto animate-slide-in flex flex-col">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold text-gray-800">Danh sách câu hỏi</h3>
+                            <button onClick={onClose} className="text-gray-500 hover:text-gray-800">
+                                <i className="fas fa-times text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <div className="grid grid-cols-5 gap-3 flex-1 content-start">
+                            {questions.map((q, idx) => {
+                                const isAnswered = userAnswers.hasOwnProperty(q.id);
+                                const isCorrect = isAnswered && userAnswers[q.id] === q.correctAnswer;
+                                const isCurrent = idx === currentIndex;
+                                
+                                let bgClass = "bg-gray-100 text-gray-600 hover:bg-gray-200";
+                                if (isAnswered) {
+                                    bgClass = isCorrect ? "bg-green-500 text-white hover:bg-green-600" : "bg-red-500 text-white hover:bg-red-600";
+                                }
+                                let borderClass = isCurrent ? "ring-2 ring-blue-500 ring-offset-2" : "";
+
+                                return (
+                                    <button
+                                        key={q.id}
+                                        onClick={() => {
+                                            onSelectQuestion(idx);
+                                        }}
+                                        className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm transition ${bgClass} ${borderClass}`}
+                                    >
+                                        {idx + 1}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        <div className="mt-6 border-t pt-4">
+                            <h4 className="text-sm font-semibold text-gray-700 mb-3">Chú thích:</h4>
+                            <div className="grid grid-cols-2 gap-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 bg-green-500 rounded"></div> <span className="text-sm text-gray-600">Đúng</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 bg-red-500 rounded"></div> <span className="text-sm text-gray-600">Sai</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 bg-gray-100 rounded border"></div> <span className="text-sm text-gray-600">Chưa làm</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 border-2 border-blue-500 rounded"></div> <span className="text-sm text-gray-600">Đang chọn</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Sidebar = ({ activeExam, onSelectExam, exams }) => {
+            return (
+                <div className="w-full md:w-64 bg-white border-r border-gray-200 flex flex-col h-full overflow-y-auto">
+                    <div className="p-4 border-b border-gray-200">
+                        <h2 className="text-xl font-bold text-gray-800 flex items-center">
+                            <i className="fas fa-book-medical mr-2 text-blue-500"></i> Lý Sinh Y Học
+                        </h2>
+                        <p className="text-xs text-gray-500 mt-1">Chọn đề để ôn tập</p>
+                    </div>
+                    <nav className="flex-1 p-2">
+                        {exams.map((exam) => (
+                            <button
+                                key={exam}
+                                onClick={() => onSelectExam(exam)}
+                                className={`w-full text-left px-4 py-3 rounded-lg mb-1 transition-colors flex items-center justify-between ${
+                                    activeExam === exam 
+                                    ? 'bg-blue-50 text-blue-700 font-semibold shadow-sm border border-blue-100' 
+                                    : 'text-gray-600 hover:bg-gray-50'
+                                }`}
+                            >
+                                <span>{exam}</span>
+                                {activeExam === exam && <i className="fas fa-chevron-right text-xs"></i>}
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+            );
+        };
+
+        const ResultModal = ({ score, total, onRestart, onClose }) => {
+            const percentage = Math.round((score / total) * 100);
+            let message = "";
+            let color = "";
+            let icon = "";
+
+            if (percentage >= 80) {
+                message = "Xuất sắc! Bạn đã nắm chắc kiến thức.";
+                color = "text-green-600";
+                icon = "fa-trophy";
+            } else if (percentage >= 50) {
+                message = "Tạm ổn. Hãy ôn tập thêm những câu sai.";
+                color = "text-yellow-600";
+                icon = "fa-star-half-alt";
+            } else {
+                message = "Cần cố gắng nhiều hơn!";
+                color = "text-red-600";
+                icon = "fa-book-open";
+            }
+
+            return (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full transform transition-all scale-100">
+                        <div className="text-center">
+                            <div className={`text-6xl mb-4 ${color}`}>
+                                <i className={`fas ${icon}`}></i>
+                            </div>
+                            <h2 className="text-2xl font-bold mb-2">Kết quả của bạn</h2>
+                            <div className="text-4xl font-extrabold text-gray-800 mb-2">
+                                {score} / {total}
+                            </div>
+                            <p className="text-gray-500 mb-6">{message}</p>
+                            
+                            <div className="flex gap-3 justify-center">
+                                <button 
+                                    onClick={onRestart}
+                                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+                                >
+                                    Làm lại
+                                </button>
+                                <button 
+                                    onClick={onClose}
+                                    className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-medium"
+                                >
+                                    Xem lại bài
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const examNames = Object.keys(QUESTION_DATA);
+            const [currentExam, setCurrentExam] = useState(examNames[0]);
+            const [questions, setQuestions] = useState([]);
+            const [currentIndex, setCurrentIndex] = useState(0);
+            const [score, setScore] = useState(0);
+            const [showResult, setShowResult] = useState(false);
+            const [selectedOption, setSelectedOption] = useState(null);
+            const [isAnswered, setIsAnswered] = useState(false);
+            const [shake, setShake] = useState(false);
+            const [autoNext, setAutoNext] = useState(true);
+            const [shuffledMode, setShuffledMode] = useState(false);
+            const [userAnswers, setUserAnswers] = useState({});
+            const [showPalette, setShowPalette] = useState(false);
+
+            useEffect(() => {
+                loadExam(currentExam);
+            }, [currentExam]);
+
+            const loadExam = (examName, shuffle = false) => {
+                let examQuestions = [...QUESTION_DATA[examName]];
+                if (shuffle) {
+                    examQuestions.sort(() => Math.random() - 0.5);
+                }
+                setQuestions(examQuestions);
+                setCurrentIndex(0);
+                setScore(0);
+                setShowResult(false);
+                setSelectedOption(null);
+                setIsAnswered(false);
+                setUserAnswers({});
+                setShowPalette(false);
+            };
+
+            const handleOptionClick = (optionIndex) => {
+                if (isAnswered) return;
+
+                setSelectedOption(optionIndex);
+                setIsAnswered(true);
+
+                const currentQuestion = questions[currentIndex];
+                const isCorrect = optionIndex === currentQuestion.correctAnswer;
+
+                // Save user answer
+                setUserAnswers(prev => ({...prev, [currentQuestion.id]: optionIndex}));
+
+                if (isCorrect) {
+                    setScore(prev => prev + 1);
+                } else {
+                    setShake(true);
+                    setTimeout(() => setShake(false), 500);
+                }
+
+                if (autoNext) {
+                    setTimeout(() => {
+                        handleNext();
+                    }, 1500);
+                }
+            };
+
+            const handleNext = () => {
+                if (currentIndex < questions.length - 1) {
+                    handleSelectQuestion(currentIndex + 1);
+                } else {
+                    setShowResult(true);
+                }
+            };
+
+            const handleSelectQuestion = (index) => {
+                setCurrentIndex(index);
+                const nextQ = questions[index];
+                
+                // Check if this question was already answered
+                if (userAnswers.hasOwnProperty(nextQ.id)) {
+                    setSelectedOption(userAnswers[nextQ.id]);
+                    setIsAnswered(true);
+                } else {
+                    setSelectedOption(null);
+                    setIsAnswered(false);
+                }
+            };
+
+            const toggleShuffle = () => {
+                const newMode = !shuffledMode;
+                setShuffledMode(newMode);
+                loadExam(currentExam, newMode);
+            };
+
+            if (questions.length === 0) return <div>Loading...</div>;
+
+            const currentQ = questions[currentIndex];
+
+            return (
+                <div className="flex flex-col md:flex-row h-screen bg-gray-100">
+                    {/* Sidebar */}
+                    <Sidebar 
+                        activeExam={currentExam} 
+                        onSelectExam={setCurrentExam} 
+                        exams={examNames} 
+                    />
+
+                    {/* Main Content */}
+                    <main className="flex-1 flex flex-col p-4 md:p-8 overflow-hidden relative">
+                        {/* Header Controls */}
+                        <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm flex-wrap gap-3">
+                            <div className="flex items-center space-x-4">
+                                <h1 className="text-xl font-bold text-gray-800 hidden md:block">{currentExam}</h1>
+                                <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                                    Câu {currentIndex + 1}/{questions.length}
+                                </span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <button 
+                                    onClick={() => setShowPalette(true)}
+                                    className="flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition"
+                                >
+                                    <i className="fas fa-th"></i>
+                                    <span className="hidden sm:inline">Danh sách câu</span>
+                                </button>
+                                <button 
+                                    onClick={toggleShuffle}
+                                    className={`p-2 rounded-lg transition ${shuffledMode ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'}`}
+                                    title="Trộn câu hỏi"
+                                >
+                                    <i className="fas fa-random"></i>
+                                </button>
+                                <button 
+                                    onClick={() => setAutoNext(!autoNext)}
+                                    className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition ${
+                                        autoNext ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    <i className={`fas ${autoNext ? 'fa-bolt' : 'fa-pause'}`}></i>
+                                    <span className="hidden sm:inline">Tự động chuyển</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Quiz Area */}
+                        <div className="flex-1 flex flex-col max-w-3xl mx-auto w-full">
+                            <ProgressBar current={currentIndex} total={questions.length} />
+
+                            <div className={`bg-white rounded-2xl shadow-lg p-6 md:p-10 flex-1 overflow-y-auto ${shake ? 'shake' : ''}`}>
+                                <h3 className="text-lg md:text-2xl font-semibold text-gray-800 mb-8 leading-relaxed">
+                                    {currentQ.question}
+                                </h3>
+
+                                <div className="space-y-3">
+                                    {currentQ.options.map((opt, idx) => {
+                                        let optionClass = "bg-white border-2 border-gray-200 hover:border-blue-400 text-gray-700";
+                                        let icon = <div className="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center font-bold text-sm mr-4">{String.fromCharCode(65 + idx)}</div>;
+
+                                        if (isAnswered) {
+                                            if (idx === currentQ.correctAnswer) {
+                                                optionClass = "bg-green-50 border-2 border-green-500 text-green-800"; // Correct answer styling
+                                                icon = <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center mr-4"><i className="fas fa-check"></i></div>;
+                                            } else if (idx === selectedOption) {
+                                                optionClass = "bg-red-50 border-2 border-red-500 text-red-800"; // Wrong selected styling
+                                                icon = <div className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center mr-4"><i className="fas fa-times"></i></div>;
+                                            } else {
+                                                optionClass = "opacity-50 border-gray-100 bg-gray-50";
+                                            }
+                                        } else if (selectedOption === idx) {
+                                            optionClass = "bg-blue-50 border-blue-500 text-blue-800";
+                                        }
+
+                                        return (
+                                            <div 
+                                                key={idx}
+                                                onClick={() => handleOptionClick(idx)}
+                                                className={`option-card p-4 rounded-xl flex items-center cursor-pointer font-medium text-base md:text-lg ${optionClass}`}
+                                            >
+                                                {icon}
+                                                <span className="flex-1">{opt}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Navigation Footer */}
+                            <div className="mt-6 flex justify-between">
+                                <button 
+                                    onClick={() => handleSelectQuestion(currentIndex - 1)}
+                                    disabled={currentIndex === 0}
+                                    className="px-4 py-2 text-gray-500 hover:bg-gray-200 rounded-lg disabled:opacity-30 transition"
+                                >
+                                    <i className="fas fa-arrow-left mr-2"></i> Câu trước
+                                </button>
+
+                                {!autoNext && isAnswered && (
+                                    <button 
+                                        onClick={handleNext}
+                                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md transition transform hover:-translate-y-1"
+                                    >
+                                        Câu tiếp theo <i className="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Slide-over Question Palette */}
+                        {showPalette && (
+                            <QuestionPalette 
+                                questions={questions}
+                                currentIndex={currentIndex}
+                                userAnswers={userAnswers}
+                                onSelectQuestion={handleSelectQuestion}
+                                onClose={() => setShowPalette(false)}
+                            />
+                        )}
+
+                        {/* Result Modal */}
+                        {showResult && (
+                            <ResultModal 
+                                score={score} 
+                                total={questions.length} 
+                                onRestart={() => loadExam(currentExam, shuffledMode)}
+                                onClose={() => setShowResult(false)} 
+                            />
+                        )}
+                    </main>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
