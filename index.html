@@ -11,7 +11,67 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-    
+    /* 1. Thiết lập chung cho mọi màn hình */
+* {
+    box-sizing: border-box; /* Giúp padding không làm tràn khung */
+}
+
+body {
+    margin: 0;
+    padding: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+}
+
+/* 2. Container chứa câu hỏi */
+.quiz-container {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* 3. Tối ưu cho Mobile (Màn hình dưới 768px) */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem; /* Tiêu đề nhỏ lại cho vừa màn hình */
+        text-align: center;
+    }
+
+    /* Các lựa chọn đáp án (A, B, C, D) */
+    .answer-option {
+        display: block;
+        width: 100%;
+        margin-bottom: 12px;
+        padding: 15px; /* Nút to ra để dễ bấm bằng ngón tay */
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    /* Hiệu ứng khi chọn (Thay vì hover trên PC) */
+    .answer-option:active {
+        background-color: #e0e0e0;
+    }
+
+    /* Nút "Câu tiếp theo" hoặc "Nộp bài" */
+    .btn-control {
+        width: 100%;
+        padding: 15px;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-top: 20px;
+    }
+
+    /* Nếu có bảng số liệu Vật lý */
+    .table-container {
+        overflow-x: auto; /* Cho phép vuốt ngang nếu bảng quá rộng */
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
         body {
             background-color: #f3f4f6;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
